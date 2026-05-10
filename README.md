@@ -81,28 +81,63 @@ Buka browser Anda dan kunjungi:
 
 ---
 
-## ☁️ Versi 2: Cara Menjalankan di Cloud secara GRATIS (Render Cloud)
+## ☁️ Versi 2: Cara Menjalankan di Cloud secara GRATIS (TANPA KARTU KREDIT)
 
-Aplikasi ini siap dideploy ke **Render** agar bisa diakses oleh siapa saja di internet secara online. 
+Karena Render sekarang memerlukan verifikasi kartu kredit di beberapa wilayah, berikut adalah **dua alternatif hosting cloud gratis terbaik yang 100% tidak memerlukan kartu kredit**:
 
-> [!TIP]
-> **Fakta Menarik Paket Gratis Render:**
-> Layanan gratis Render **tidak memiliki masa kedaluwarsa** (tidak akan mati setelah beberapa hari). Website Anda akan online selamanya secara gratis!
-> *Catatan:* Jika tidak ada pengunjung selama 15 menit, server Render akan tidur (spin down). Jika ada pengunjung baru masuk, server butuh waktu ~40-50 detik untuk bangun otomatis (cold start). Setelah bangun, website berjalan normal kembali.
+---
 
-### Langkah-langkah Deploy ke Render:
+### Opsi A: Hugging Face Spaces (Sangat Direkomendasikan & Modern)
 
-1. Buat akun gratis di **[Render](https://render.com/)** menggunakan akun GitHub Anda.
-2. Di Dashboard Render, klik **New +** -> **Web Service**.
-3. Hubungkan repository GitHub Anda yang berisi project `web_app_pricemycar`.
-4. Isi konfigurasi berikut di halaman Render:
-   * **Name**: `pricemycar` *(bebas)*
-   * **Region**: `Singapore` *(paling dekat dengan Indonesia)*
-   * **Root Directory**: `web_app` *(PENTING! Karena file `app.py` kita berada di dalam subfolder `web_app`)*
-   * **Language**: `Python`
-   * **Build Command**: `pip install -r requirements.txt`
-   * **Start Command**: `gunicorn app:app`
-   * **Plan**: `Free`
-5. Klik **Deploy Web Service** di bagian bawah.
+[Hugging Face](https://huggingface.co/) adalah platform AI terbesar di dunia. Mereka menyediakan layanan **Spaces** gratis untuk menjalankan aplikasi Python/Docker selamanya tanpa meminta kartu kredit sama sekali!
 
-Tunggu waktu kompilasi 2-3 menit. Setelah selesai, Render akan memberikan tautan publik gratis seperti `https://pricemycar.onrender.com` yang siap diakses di laptop maupun HP teman-teman dan dosen Anda! 🎉
+Saya sudah membuatkan file **`Dockerfile`** khusus di folder `web_app` agar aplikasi Anda siap dijalankan di Hugging Face.
+
+#### Langkah-langkah Deploy di Hugging Face Spaces:
+1. Daftar akun gratis di **[Hugging Face](https://huggingface.co/join)** (Tidak perlu verifikasi kartu kredit).
+2. Di halaman utama, klik profil Anda di kanan atas -> **New Space**.
+3. Isi konfigurasi berikut:
+   * **Space name**: `pricemycar` *(bebas)*
+   * **License**: `mit` *(bebas)*
+   * **Select the Space SDK**: Pilih **Docker** *(PENTING! Jangan pilih Streamlit atau Gradio)*
+   * **Docker template**: Pilih **Blank**
+   * **Space hardware**: Pilih **Cpu basic · Free** (ini gratis selamanya!)
+   * **Visibility**: **Public** (agar dosen/teman bisa buka)
+4. Klik **Create Space**.
+5. Di halaman selanjutnya, pilih tab **Files** -> klik **+ Add file** -> **Upload files**.
+6. Seret/upload seluruh file dan folder dari dalam folder `web_app` Anda (termasuk folder `templates`, `static`, file `.pkl`, `requirements.txt`, dan `Dockerfile`).
+7. Klik **Commit changes to main** di bagian bawah.
+
+Hugging Face akan otomatis merakit Docker container Anda selama 1-2 menit. Begitu statusnya berubah menjadi **Running** hijau, website Anda resmi online dan bisa diakses lewat menu **App** di atas! 🎉
+
+---
+
+### Opsi B: PythonAnywhere (Klasik, Mudah & Tanpa Git)
+
+[PythonAnywhere](https://www.pythonanywhere.com/) sangat terkenal untuk menghosting web Flask/Django pemula secara gratis dan mudah tanpa kartu kredit.
+
+#### Langkah-langkah Deploy di PythonAnywhere:
+1. Daftar akun gratis di **[PythonAnywhere](https://www.pythonanywhere.com/registration/register/beginner/)** (Pilih tipe akun **Create a Beginner account**).
+2. Masuk ke tab **Files** di dashboard Anda, lalu buat folder baru bernama `pricemycar`.
+3. Unggah seluruh isi file dari folder `web_app` Anda ke sana (bisa menggunakan fitur upload file di web UI mereka).
+4. Buka tab **Consoles** -> jalankan **Bash Console**, lalu buat virtual environment dan pasang dependensi:
+   ```bash
+   mkvirtualenv pricemycar_env --python=/usr/bin/python3.10
+   pip install -r requirements.txt
+   ```
+5. Masuk ke tab **Web** -> Klik **Add a new web app**:
+   * Pilih manual configuration.
+   * Pilih versi Python (misal `Python 3.10`).
+6. Di halaman pengaturan web app PythonAnywhere, sesuaikan:
+   * **Code -> Source code**: `/home/username_anda/pricemycar`
+   * **Virtualenv -> Path**: `/home/username_anda/.virtualenvs/pricemycar_env`
+7. Edit file **WSGI configuration file** (ada link-nya di tab Web tersebut) dan ubah isinya agar mengarah ke Flask app Anda:
+   ```python
+   import sys
+   path = '/home/username_anda/pricemycar'
+   if path not in sys.path:
+       sys.path.append(path)
+   from app import app as application
+   ```
+8. Klik **Reload Web App** di bagian atas halaman Web. Website Anda sekarang aktif di alamat `http://username_anda.pythonanywhere.com`! 🎉
+
