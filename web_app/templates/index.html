@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Home — PriceMyCar{% endblock %}
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">⚡ Powered by Advanced Machine Learning</div>
+    <h1>Predict Your Car<br>Price <span>Instantly</span></h1>
+    <p>Stop guessing. Get highly accurate, data-driven valuations for any used car in seconds using our state-of-the-art prediction model trained on millions of market records.</p>
+    <div class="hero-btns">
+      <a href="{{ url_for('predict_page') }}" class="btn-primary">Start Prediction →</a>
+      <a href="{{ url_for('model_info') }}" class="btn-outline">How It Works</a>
+    </div>
+  </div>
+  <div class="hero-img">
+    <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="170" cy="170" rx="160" ry="20" fill="#EFF6FF" opacity=".6"/>
+      <!-- car body -->
+      <path d="M40 130 Q60 90 120 80 L220 80 Q280 90 300 130 Z" fill="#fff" stroke="#CBD5E1" stroke-width="2"/>
+      <path d="M110 80 Q130 50 170 45 Q210 50 230 80 Z" fill="#EFF6FF" stroke="#CBD5E1" stroke-width="1.5"/>
+      <!-- windows -->
+      <path d="M120 79 Q138 56 170 52 Q202 56 220 79 Z" fill="#BFDBFE" opacity=".7"/>
+      <!-- wheels -->
+      <circle cx="100" cy="138" r="22" fill="#1E293B"/><circle cx="100" cy="138" r="12" fill="#94A3B8"/>
+      <circle cx="240" cy="138" r="22" fill="#1E293B"/><circle cx="240" cy="138" r="12" fill="#94A3B8"/>
+      <!-- red accent stripe -->
+      <path d="M60 118 Q170 112 280 118" stroke="#EF4444" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why-section">
+  <h2 class="section-heading">Why Choose PriceMyCar?</h2>
+  <p class="section-sub">Our platform combines massive datasets with sophisticated algorithms to give you the edge in the used car market.</p>
+  <div class="cards-grid">
+    <div class="card"><div class="card-icon">🎯</div><h3>Accurate Prediction</h3><p>Our Random Forest model achieves into accuracy, outperforming traditional dealership appraisal methods.</p></div>
+    <div class="card"><div class="card-icon">📊</div><h3>Data-Driven Analysis</h3><p>Trained on over 4,300 historical car sales, factoring in depreciation, seasonality, and regional trends.</p></div>
+    <div class="card"><div class="card-icon">⚡</div><h3>Easy to Use</h3><p>No complex spreadsheets. Just enter basic vehicle details and get an instant, understandable valuation.</p></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <h2 class="section-heading">How It Works</h2>
+  <p class="section-sub">Get your car's value in three simple steps.</p>
+  <div class="steps-grid">
+    <div class="step"><div class="step-num">1</div><h3>Input Car Data</h3><p>Provide basic details like brand, model, year, mileage, and condition.</p></div>
+    <div class="step"><div class="step-num">2</div><h3>Model Processes Data</h3><p>Our ML pipeline cleans the data and runs it through our trained prediction model.</p></div>
+    <div class="step"><div class="step-num">3</div><h3>Get Price Estimation</h3><p>Receive an accurate price range along with confidence metrics and market insights.</p></div>
+  </div>
+  <a href="{{ url_for('predict_page') }}" class="btn-primary" style="margin-top:40px;display:inline-block">Try It Now</a>
+</section>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Prediction Result — PriceMyCar{% endblock %}
+
+{% block content %}
+<section class="result-page">
+  <div class="result-container">
+    <a href="{{ url_for('predict_page') }}" class="back-link">← Back</a>
+    <h1>Prediction Result</h1>
+    <p class="page-sub">{{ result.inputs.year }} {{ result.inputs.brand_model }}</p>
+
+    <div class="result-grid">
+
+      <!-- LEFT: price card + market comparison -->
+      <div class="result-left">
+        <div class="price-card">
+          <div class="confidence-badge">⚡ Powered by {{ result.ai_model }} · Accuracy: {{ result.accuracy_r2 }}</div>
+          <div class="price-label">Estimated Market Value</div>
+          <div class="price-main">Rp {{ "{:,.0f}".format(result.adjusted_price) }}</div>
+
+          {% if result.condition.total_penalty_pct > 0 %}
+          <div class="price-adjustment">
+            <span class="base-label">Base ML Price: Rp {{ "{:,.0f}".format(result.base_price) }}</span>
+            <span class="penalty-tag">−{{ result.condition.total_penalty_pct }}% condition</span>
+          </div>
+          {% endif %}
+
+          <div class="price-range">
+            Expected range: Rp {{ "{:,.0f}".format(result.ci_low) }} – Rp {{ "{:,.0f}".format(result.ci_high) }}
+          </div>
+        </div>
+
+        <!-- Market Comparison bar chart (static demo) -->
+        <div class="chart-card">
+          <h3>Market Comparison</h3>
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar" style="height:{{ [55,60,65,70]|random }}%" title="Trade-in"></div>
+              <span>Trade-in</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar highlight" style="height:75%"></div>
+              <span>Predicted (Ours)</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar" style="height:{{ [80,85,90,95]|random }}%" title="Dealer Retail"></div>
+              <span>Dealer Retail</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: key factors + condition breakdown -->
+      <div class="result-right">
+
+        <div class="factors-card">
+          <h3>🔑 Key Factors</h3>
+
+          <div class="factor positive">
+            <div class="factor-label">Positive Impact</div>
+            <p>
+              {% if result.inputs.km < 60000 %}Low mileage ({{ "{:,}".format(result.inputs.km) }} mi) adds value.{% endif %}
+              {% if result.inputs.owner == 'First Owner' %}First-owner history is a strong positive signal.{% endif %}
+              {% if result.inputs.transmission == 'Automatic' %}Automatic transmission commands a premium.{% endif %}
+            </p>
+          </div>
+
+          <div class="factor negative">
+            <div class="factor-label">Negative Impact</div>
+            <p>
+              {% if result.condition.total_penalty_pct > 0 %}
+                Physical condition deductions total −{{ result.condition.total_penalty_pct }}%.
+              {% endif %}
+              {% if result.inputs.km > 80000 %}
+                High mileage ({{ "{:,}".format(result.inputs.km) }} mi) reduces value.
+              {% endif %}
+            </p>
+          </div>
+        </div>
+
+        <!-- Condition Breakdown -->
+        {% if result.condition.total_penalty_pct > 0 %}
+        <div class="factors-card">
+          <h3>🔍 Condition Breakdown</h3>
+          <table class="breakdown-table">
+            <thead><tr><th>Factor</th><th>Status</th><th>Deduction</th></tr></thead>
+            <tbody>
+              {% for key, val in result.condition.breakdown.items() %}
+              {% if val.penalty_pct != 0 %}
+              <tr>
+                <td>{{ key.replace('_', ' ').title() }}</td>
+                <td>{{ val.label }}</td>
+                <td class="{{ 'penalty-neg' if val.penalty_pct > 0 else 'penalty-pos' }}">
+                  {{ '-' if val.penalty_pct > 0 else '+' }}{{ val.penalty_pct|abs }}%
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+              <tr class="total-row">
+                <td colspan="2"><strong>Total Condition Adjustment</strong></td>
+                <td><strong>−{{ result.condition.total_penalty_pct }}%</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+
+        <div class="factors-card">
+          <div class="factor-label">Market Trend</div>
+          <p>Demand for {{ result.inputs.brand_model.split()[0] }} vehicles is currently stable in the used car market.</p>
+          <a href="{{ url_for('predict_page') }}" class="btn-primary" style="margin-top:16px;display:inline-block">
+            Predict Another Car
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

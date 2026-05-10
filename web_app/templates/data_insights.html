@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Data Insights — PriceMyCar{% endblock %}
+{% block extra_head %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>{% endblock %}
+{% block content %}
+<section class="insights-page">
+  <h1>Market Insights</h1>
+  <p class="page-sub">Explore trends and patterns from our dataset of 4,300+ vehicles.</p>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">📁 Total Records</div><div class="stat-value">4,340</div></div>
+    <div class="stat-card"><div class="stat-label">📉 Avg. 3-Year Depreciation</div><div class="stat-value">31.2%</div></div>
+    <div class="stat-card"><div class="stat-label">📊 Market Volatility</div><div class="stat-value" style="font-size:1.3rem;color:var(--green)">Low</div></div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-wrap"><h3>Average Depreciation Curve</h3><canvas id="deprecChart" height="180"></canvas></div>
+    <div class="chart-wrap"><h3>Price Impact by Mileage</h3><canvas id="mileageChart" height="180"></canvas></div>
+  </div>
+  <div class="chart-wrap" style="margin-bottom:20px"><h3>Dataset Brand Distribution</h3><canvas id="brandChart" height="100"></canvas></div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+const blue = '#2563EB', lblue = '#BFDBFE', muted = '#94A3B8';
+// Depreciation curve
+new Chart(document.getElementById('deprecChart'), {
+  type:'line', data:{
+    labels:['Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Year 7'],
+    datasets:[{label:'Value Retained %',data:[100,82,70,61,54,48,43],borderColor:blue,backgroundColor:lblue+'44',fill:true,tension:.4,pointBackgroundColor:blue}]
+  }, options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:110}}}
+});
+// Price by mileage
+new Chart(document.getElementById('mileageChart'), {
+  type:'bar', data:{
+    labels:['0–20k','20–40k','40–60k','60–80k','80–100k','100k+'],
+    datasets:[{label:'Avg Price (₹L)',data:[18.2,15.4,12.8,10.6,8.3,5.9],backgroundColor:blue}]
+  }, options:{plugins:{legend:{display:false}}}
+});
+// Brand distribution
+new Chart(document.getElementById('brandChart'), {
+  type:'doughnut', data:{
+    labels:['Maruti','Hyundai','Honda','Toyota','Ford','Others'],
+    datasets:[{data:[28,18,12,10,8,24],backgroundColor:[blue,'#3B82F6','#60A5FA','#93C5FD',lblue,muted]}]
+  }, options:{plugins:{legend:{position:'bottom'}}}
+});
+</script>
+{% endblock %}

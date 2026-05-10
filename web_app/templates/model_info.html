@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Model Info — PriceMyCar{% endblock %}
+{% block content %}
+<section class="model-page">
+  <h1>Under the Hood</h1>
+  <p class="section-sub">Discover how our machine learning model processes data to deliver highly accurate price predictions.</p>
+
+  <h2 style="margin-top:40px;font-size:1.1rem;font-weight:600">Prediction Pipeline</h2>
+  <div class="pipeline">
+    <div class="pipe-step"><div class="pipe-icon">📥</div><h4>1. Data Ingestion</h4><p>Raw user input is collected and validated.</p></div>
+    <div class="pipe-step"><div class="pipe-icon">🔧</div><h4>2. Preprocessing</h4><p>Encoding categorical variables and condition scoring.</p></div>
+    <div class="pipe-step active"><div class="pipe-icon" style="color:#fff">⚙️</div><h4>3. Inference</h4><p>Model calculates the estimate.</p></div>
+    <div class="pipe-step"><div class="pipe-icon">📈</div><h4>4. Output</h4><p>Price range and confidence score generated.</p></div>
+  </div>
+
+  <div class="algo-metrics">
+    <div class="algo-section">
+      <h2>The Algorithm</h2>
+      <p>PriceMyCar uses a <strong>Gradient Boosting Regressor</strong>, an ensemble learning method that builds trees sequentially, each correcting the errors of the previous one.</p>
+      <p>Unlike simple linear regression, gradient boosting captures complex, non-linear relationships — such as how depreciation rate of a luxury car differs drastically from an economy car after the 50,000-mile mark.</p>
+      <h3 style="margin-top:20px;font-size:.9rem;font-weight:600">Key Features Used:</h3>
+      <ul class="feature-list">
+        <li>Brand &amp; Model (Frequency Encoded)</li>
+        <li>Year of Manufacture / Car Age</li>
+        <li>Mileage (Log Transformed)</li>
+        <li>Fuel Type &amp; Transmission (OHE)</li>
+        <li>Owner History (Ordinal Encoded)</li>
+        <li>km_per_year &amp; age×km interaction</li>
+        <li>Condition Score (10-factor system)</li>
+      </ul>
+    </div>
+    <div class="metrics-section">
+      <h2>Performance Metrics</h2>
+      <div class="metric-row">
+        <div><div class="metric-name">R² Score (Accuracy)</div><div class="metric-desc">Explains 93%+ of variance in car prices. Score closer to 1.0 indicates a perfect fit.</div></div>
+        <div class="metric-val">0.93+</div>
+      </div>
+      <div class="metric-row">
+        <div><div class="metric-name">MAE (Mean Absolute Error)</div><div class="metric-desc">On average, predictions are off by this amount from actual selling price.</div></div>
+        <div class="metric-val" style="color:var(--green)">~₹65K</div>
+      </div>
+      <div class="metric-row">
+        <div><div class="metric-name">RMSE (Root Mean Square Error)</div><div class="metric-desc">Penalizes larger errors more heavily. Indicates strong consistency.</div></div>
+        <div class="metric-val" style="color:var(--green)">~₹90K</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

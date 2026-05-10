@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}PriceMyCar{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────── -->
+<nav class="navbar">
+  <a href="{{ url_for('home') }}" class="nav-brand">
+    <div class="nav-logo">P</div>
+    <span>PriceMyCar</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+    <li><a href="{{ url_for('predict_page') }}" class="{% if request.endpoint in ['predict_page','predict_submit'] %}active{% endif %}">Predict</a></li>
+    <li><a href="{{ url_for('data_insights') }}" class="{% if request.endpoint == 'data_insights' %}active{% endif %}">Data Insights</a></li>
+    <li><a href="{{ url_for('model_info') }}" class="{% if request.endpoint == 'model_info' %}active{% endif %}">Model Info</a></li>
+    <li><a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">About</a></li>
+  </ul>
+  <a href="{{ url_for('predict_page') }}" class="btn-primary">Get Started</a>
+</nav>
+
+<!-- ── PAGE CONTENT ────────────────────── -->
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ── FOOTER ──────────────────────────── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-brand">
+        <div class="nav-logo">P</div>
+        <span>PriceMyCar</span>
+      </div>
+      <p>Empowering buyers and sellers with highly accurate,<br>machine learning-driven used car price predictions.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="{{ url_for('predict_page') }}">Predict Price</a></li>
+        <li><a href="{{ url_for('data_insights') }}">Data Insights</a></li>
+        <li><a href="{{ url_for('model_info') }}">How It Works</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="{{ url_for('about') }}">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-copy">© 2025 PriceMyCar. All rights reserved.</div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

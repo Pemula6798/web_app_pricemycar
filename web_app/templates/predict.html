@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block title %}Predict Car Price — PriceMyCar{% endblock %}
+
+{% block content %}
+<section class="predict-page">
+  <div class="predict-container">
+
+    <!-- LEFT: form -->
+    <div class="predict-form-wrap">
+      <h1>Vehicle Details</h1>
+      <p class="page-sub">Enter the specifications of the car to get an accurate price prediction.</p>
+
+      {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('predict_submit') }}" id="predictForm">
+
+        <!-- ── Make & Model ───────────────────────── -->
+        <div class="form-section">
+          <div class="section-title"><span class="section-icon">🚗</span> Make &amp; Model</div>
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Brand</label>
+              <input type="text" name="brand" placeholder="e.g. Toyota" required>
+            </div>
+            <div class="form-group">
+              <label>Model</label>
+              <input type="text" name="model" placeholder="e.g. Camry, Civic, F-150" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Age & Mileage ─────────────────────── -->
+        <div class="form-section">
+          <div class="section-title"><span class="section-icon">📅</span> Age &amp; Mileage</div>
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Year of Production</label>
+              <input type="number" name="year" placeholder="e.g. 2019" min="1990" max="2025" required>
+            </div>
+            <div class="form-group">
+              <label>Mileage (miles)</label>
+              <input type="number" name="mileage" placeholder="e.g. 45000" min="0" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Specs ─────────────────────────────── -->
+        <div class="form-section">
+          <div class="section-title"><span class="section-icon">⚙️</span> Specifications</div>
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Fuel Type</label>
+              <select name="fuel_type" required>
+                <option value="">Select Fuel Type</option>
+                <option>Petrol</option>
+                <option>Diesel</option>
+                <option>CNG</option>
+                <option>LPG</option>
+                <option>Electric</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Transmission</label>
+              <select name="transmission" required>
+                <option value="">Select Transmission</option>
+                <option>Manual</option>
+                <option>Automatic</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Seller Type</label>
+              <select name="seller_type">
+                <option>Individual</option>
+                <option>Dealer</option>
+                <option>Trustmark Dealer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Owner</label>
+              <select name="owner">
+                <option>First Owner</option>
+                <option>Second Owner</option>
+                <option>Third Owner</option>
+                <option>Fourth &amp; Above Owner</option>
+                <option>Test Drive Car</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── CONDITION FACTORS (Professor's Suggestion) ── -->
+        <div class="form-section condition-section">
+          <div class="section-title">
+            <span class="section-icon">🔍</span>
+            Physical Condition Factors
+            <span class="badge-new">New</span>
+          </div>
+          <p class="section-desc">
+            These factors are <strong>not in the original dataset</strong> but significantly affect real-world resale value.
+            Our scoring system applies deductions to the ML base price based on your inputs.
+          </p>
+
+          <!-- Body Damage -->
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Body Damage Severity</label>
+              <select name="body_damage_severity">
+                <option value="0">No Damage (0%)</option>
+                <option value="1">Minor Scratches / Scuffs (-4%)</option>
+                <option value="2">Moderate Dents (-12%)</option>
+                <option value="3">Severe / Structural Damage (-28%)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Number of Dents</label>
+              <input type="number" name="dent_count" placeholder="0" min="0" max="20" value="0">
+              <small>Each dent = -2%, max -15%</small>
+            </div>
+          </div>
+
+          <!-- Paint & Interior -->
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Paint Condition</label>
+              <select name="paint_condition">
+                <option value="excellent">Excellent (0%)</option>
+                <option value="good" selected>Good (-2%)</option>
+                <option value="fair">Fair / Faded (-6%)</option>
+                <option value="poor">Poor / Peeling (-13%)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Interior Condition</label>
+              <select name="interior_condition">
+                <option value="excellent">Excellent (0%)</option>
+                <option value="good" selected>Good (-2%)</option>
+                <option value="fair">Fair / Stained (-7%)</option>
+                <option value="poor">Poor / Torn (-15%)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Accident & Flood -->
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Accident History</label>
+              <select name="accident_history">
+                <option value="none">No Accident (0%)</option>
+                <option value="minor">Minor Accident, Repaired (-8%)</option>
+                <option value="moderate">Moderate / Airbag Deployed (-20%)</option>
+                <option value="major">Major Accident / Total-Loss (-40%)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Flood / Water Damage</label>
+              <select name="flood_damage">
+                <option value="none">None (0%)</option>
+                <option value="minor">Minor / Interior Only (-20%)</option>
+                <option value="severe">Severe / Engine Affected (-50%)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Engine & Tires -->
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Engine &amp; Mechanical</label>
+              <select name="engine_condition">
+                <option value="excellent">Excellent (0%)</option>
+                <option value="good" selected>Good (-3%)</option>
+                <option value="fair">Fair / Minor Issues (-10%)</option>
+                <option value="poor">Poor / Major Repair (-30%)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tire Condition</label>
+              <select name="tire_condition">
+                <option value="good" selected>Good (&gt;50% Tread) (0%)</option>
+                <option value="worn">Worn (20–50% Tread) (-3%)</option>
+                <option value="bald">Bald / Needs Replacement (-5%)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Service History & Mods -->
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label>Service / Maintenance History</label>
+              <select name="service_history">
+                <option value="complete">Complete Records (+3% Bonus)</option>
+                <option value="partial" selected>Partial Records (0%)</option>
+                <option value="none">No Records (-6%)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Modification Status</label>
+              <select name="modification_status">
+                <option value="stock" selected>Stock / Unmodified (0%)</option>
+                <option value="cosmetic_minor">Minor Cosmetic Mods (-2%)</option>
+                <option value="cosmetic_major">Major Cosmetic Mods (-5%)</option>
+                <option value="performance">Performance Mods (-4%)</option>
+                <option value="non_reversible">Non-Reversible Mods (-8%)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Live penalty preview -->
+          <div class="penalty-preview" id="penaltyPreview">
+            <div class="penalty-bar-wrap">
+              <span>Estimated Condition Deduction:</span>
+              <span class="penalty-pct" id="penaltyPct">~5%</span>
+            </div>
+            <div class="penalty-bar"><div class="penalty-fill" id="penaltyFill" style="width:5%"></div></div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-predict">Predict Price →</button>
+      </form>
+    </div>
+
+    <!-- RIGHT: progress sidebar -->
+    <aside class="predict-sidebar">
+      <div class="sidebar-card">
+        <h3>Data Completeness</h3>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+          <span id="progressPct">14%</span>
+        </div>
+        <ul class="completeness-list" id="completenessList">
+          <li class="pending" id="cl-make">Make &amp; Model</li>
+          <li class="pending" id="cl-age">Age &amp; Mileage</li>
+          <li class="pending" id="cl-spec">Specifications</li>
+          <li class="pending" id="cl-cond">Condition Factors</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card how-card">
+        <h3>💡 How it works</h3>
+        <p>Our model operates over 4,300 real-world car sales, calculating price anomalies specific to the make and model.</p>
+        <p style="margin-top:8px">The <strong>condition score</strong> then adjusts the base ML price using empirical depreciation weights for each physical factor.</p>
+      </div>
+    </aside>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}
