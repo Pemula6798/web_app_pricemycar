@@ -1,222 +1,91 @@
-# 🚗 PriceMyCar — Complete Setup Guide
+---
+title: PriceMyCar
+emoji: 🚗
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+---
 
-## Struktur Proyek
+# 🚗 PriceMyCar — Panduan Lengkap Instalasi & Penggunaan
 
-```
-pricemycar/
-├── app.py                     ← Flask backend + Condition Penalty System
-├── requirements.txt
-├── best_model.pkl             ← dari notebook (joblib.dump)
-├── ordinal_encoder.pkl
-├── brand_freq_map.pkl
-├── feature_columns.pkl
-├── templates/
-│   ├── base.html              ← Layout utama (navbar, footer)
-│   ├── index.html             ← Landing page
-│   ├── predict.html           ← Form prediksi + condition factors
-│   ├── result.html            ← Hasil prediksi
-│   ├── data_insights.html     ← Dashboard chart
-│   ├── model_info.html        ← Under the hood
-│   └── about.html             ← About page
-└── static/
-    ├── css/style.css
-    └── js/
-        ├── main.js
-        └── predict.js         ← Live penalty preview JS
-```
+Selamat datang di **PriceMyCar**, sebuah aplikasi web premium berbasis sistem estimasi harga mobil bekas pintar yang memadukan **Algoritma Analisis Harga Historis** dengan **Sistem Penilaian Kondisi Fisik Kendaraan (10-Factor Condition Evaluation System)**.
+
+Aplikasi ini dirancang dengan antarmuka modern yang sepenuhnya responsif, sehingga tampilannya sangat dinamis, premium, dan rapi baik saat dibuka melalui **PC/Laptop** maupun **HP (Mobile)**.
 
 ---
 
-## Langkah 1 — Jalankan Notebook Dulu
-
-Buka `Car_Prediction_Fixed.ipynb` dan run semua cell sampai selesai.
-Cell terakhir akan meng-export 4 file:
-
-```
-best_model.pkl
-ordinal_encoder.pkl
-brand_freq_map.pkl        ← PENTING: ini baru di versi fixed
-feature_columns.pkl
-```
-
-Semua file `.pkl` ini harus ada di folder yang sama dengan `app.py`.
+## ⚡ Fitur Utama Aplikasi
+1. **Algoritma Estimasi Harga Empiris**: Menghitung harga dasar mobil secara objektif berdasarkan pola data transaksi pasar mobil bekas.
+2. **Sistem Koreksi Kondisi Fisik**: Melakukan kalibrasi harga yang presisi berdasarkan 10 kriteria kondisi fisik kendaraan secara nyata (seperti kerusakan bodi, riwayat banjir, kondisi mesin, interior, dll.).
+3. **Desain Antarmuka Premium & Responsif**: Menggunakan struktur grid modern dan efek transisi halus yang otomatis menyesuaikan ukuran layar perangkat (PC, Tablet, dan Smartphone).
+4. **Konversi Mata Uang Rupiah (IDR)**: Sistem konversi otomatis dengan visualisasi simbol mata uang Rp yang akurat.
 
 ---
 
-## Langkah 2 — Setup Python Environment
+## 💻 Panduan Menjalankan Aplikasi Secara Lokal (Local Setup)
 
+Ikuti langkah-langkah mudah berikut untuk menginstal dan menjalankan aplikasi PriceMyCar langsung di komputer atau laptop Anda:
+
+### 1. Buka Terminal & Masuk ke Folder Web App
+Buka terminal (CMD / PowerShell / Bash) lalu arahkan ke direktori `web_app`:
 ```bash
-# Buat virtual environment
-python -m venv venv
+cd web_app
+```
 
-# Aktifkan (Windows)
-venv\Scripts\activate
+### 2. Buat & Aktifkan Virtual Environment (Sangat Direkomendasikan)
+Gunakan Virtual Environment agar instalasi package rapi dan tidak mengganggu python sistem komputer Anda:
 
-# Aktifkan (Mac/Linux)
-source venv/bin/activate
+*   **Untuk Pengguna Windows (Command Prompt / PowerShell):**
+    ```powershell
+    python -m venv venv
+    venv\Scripts\activate
+    ```
 
-# Install dependencies
+*   **Untuk Pengguna Mac / Linux (Terminal):**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+### 3. Install Seluruh Dependensi Aplikasi
+Jalankan perintah berikut untuk menginstal semua modul yang diperlukan aplikasi:
+```bash
 pip install -r requirements.txt
 ```
 
----
-
-## Langkah 3 — Susun Folder
-
-```
-pricemycar/
-├── app.py
-├── requirements.txt
-├── best_model.pkl            ← copy dari output notebook
-├── ordinal_encoder.pkl       ← copy dari output notebook
-├── brand_freq_map.pkl        ← copy dari output notebook
-├── feature_columns.pkl       ← copy dari output notebook
-├── templates/                ← copy semua file .html
-└── static/
-    ├── css/
-    │   └── style.css
-    └── js/
-        ├── main.js
-        └── predict.js
-```
-
----
-
-## Langkah 4 — Jalankan Flask
-
+### 4. Jalankan Aplikasi
+Jalankan server lokal aplikasi menggunakan perintah:
 ```bash
-# Mode development (auto-reload)
 python app.py
-
-# Atau pakai Flask CLI
-flask --app app run --debug
 ```
 
-Buka browser: **http://localhost:5000**
+### 5. Buka Aplikasi di Browser
+Setelah server berjalan, buka browser kesayangan Anda dan akses alamat berikut:
+👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
 
 ---
 
-## Langkah 5 — Test Semua Route
+## 📊 Sistem Penilaian & Koreksi Kondisi Kendaraan (10-Factor)
 
-| URL | Halaman |
-|-----|---------|
-| `/` | Landing page |
-| `/predict` | Form prediksi |
-| `/data-insights` | Market dashboard |
-| `/model-info` | Under the hood |
-| `/about` | About page |
-| `/api/predict` | JSON API (POST) |
+Aplikasi ini mengintegrasikan logika penilaian kondisi fisik yang objektif. Harga akhir mobil diperoleh dari perhitungan berikut:
 
-Test API via curl:
-```bash
-curl -X POST http://localhost:5000/api/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "brand": "Toyota",
-    "model": "Innova",
-    "year": 2019,
-    "mileage": 45000,
-    "fuel_type": "Diesel",
-    "transmission": "Manual",
-    "owner": "First Owner",
-    "seller_type": "Individual",
-    "body_damage_severity": "1",
-    "dent_count": "2",
-    "paint_condition": "good",
-    "interior_condition": "good",
-    "accident_history": "none",
-    "flood_damage": "none",
-    "engine_condition": "excellent",
-    "tire_condition": "good",
-    "service_history": "complete",
-    "modification_status": "stock"
-  }'
+```text
+Harga Akhir = Harga Estimasi Dasar × (1 - Total Persentase Pengurangan)
 ```
 
----
+Sistem akan mengevaluasi **10 Faktor Fisik** berikut untuk mengukur persentase pengurangan nilai jual kendaraan secara adil:
 
-## Condition Penalty System (Saran Dosen)
-
-### Cara Kerja
-
-```
-Final Price = ML Base Price × (1 - total_penalty)
-```
-
-Model ML memprediksi harga dari fitur dataset (brand, mileage, dll).
-Kemudian `calculate_condition_penalty()` menghitung total deduction
-dari 10 faktor kondisi fisik yang **tidak ada di dataset**.
-
-### 10 Faktor Kondisi
-
-| Faktor | Opsi | Deduction |
-|--------|------|-----------|
-| **Body Damage Severity** | None / Scratches / Dents / Severe | 0% → -28% |
-| **Dent Count** | 0–20 | -2% per dent, max -15% |
-| **Paint Condition** | Excellent → Poor | 0% → -13% |
-| **Interior Condition** | Excellent → Poor | 0% → -15% |
-| **Accident History** | None → Major | 0% → -40% |
-| **Flood Damage** | None → Severe | 0% → -50% |
-| **Engine & Mechanical** | Excellent → Poor | 0% → -30% |
-| **Tire Condition** | Good → Bald | 0% → -5% |
-| **Service History** | Complete → None | **+3% bonus** → -6% |
-| **Modifications** | Stock → Non-reversible | 0% → -8% |
-
-### Contoh Kalkulasi
-
-```
-Base ML Price: ₹450,000
-
-+ Minor scratches:     -4%   = -₹18,000
-+ 3 dents:             -6%   = -₹27,000
-+ Fair paint:          -6%   = -₹27,000
-+ Good interior:       -2%   = -₹9,000
-+ No accident:          0%
-+ No flood:             0%
-+ Good engine:         -3%   = -₹13,500
-+ Good tires:           0%
-+ Partial service:      0%
-+ Stock:                0%
-────────────────────────────────────────
-Total penalty:        -21%   = -₹94,500
-Final Price:          ₹355,500
-```
-
-### Basis Penelitian
-
-Nilai penalty didasarkan pada:
-- **NADA Used Car Guide** depreciation tables (USA market)
-- **CarGurus Price Analysis** — damage impact study 2023
-- **iSeeCars.com** — flood damage resale value research
-- **Carfax** — accident history value impact reports
-
-Untuk dataset India (CarDekho), values bisa disesuaikan dengan survei pasar lokal.
-
----
-
-## Common Errors & Fix
-
-| Error | Penyebab | Fix |
-|-------|----------|-----|
-| `FileNotFoundError: best_model.pkl` | .pkl belum di-export | Run notebook sampai cell terakhir |
-| `KeyError: column_name` | Kolom OHE mismatch | `reindex` sudah ada di kode, cek versi sklearn |
-| `ValueError: shape mismatch` | `feature_columns.pkl` berbeda versi | Hapus semua .pkl, re-run notebook |
-| Template not found | Struktur folder salah | Pastikan `templates/` di direktori yang sama dengan `app.py` |
-
----
-
-## Deployment (Optional — untuk presentasi)
-
-```bash
-# Install gunicorn
-pip install gunicorn
-
-# Run production server
-gunicorn -w 4 app:app
-
-# Atau pakai Railway/Render (gratis):
-# 1. Push ke GitHub
-# 2. Connect repo ke Railway/Render
-# 3. Set environment variable SECRET_KEY
-# 4. Deploy
-```
+| No | Faktor Kondisi | Pilihan Kondisi Pengguna | Dampak Terhadap Harga |
+|----|----------------|--------------------------|-----------------------|
+| 1  | **Tingkat Kerusakan Bodi** | Aman / Goresan Ringan / Penyok / Parah | 0% s/d -28% |
+| 2  | **Jumlah Penyok (Dents)** | Batasan input: 0 s/d 20 penyok | -2% per penyok (Max -15%) |
+| 3  | **Kondisi Cat Mobil** | Sangat Baik / Cukup Baik / Pudar / Rusak | 0% s/d -13% |
+| 4  | **Kondisi Interior & Dasbor** | Sangat Bersih / Bersih / Kotor / Sobek | 0% s/d -15% |
+| 5  | **Riwayat Kecelakaan** | Tidak Pernah / Ringan / Sedang / Parah | 0% s/d -40% |
+| 6  | **Riwayat Terendam Banjir** | Tidak Pernah / Setinggi Roda / Setinggi Dasbor | 0% s/d -50% |
+| 7  | **Kondisi Mesin & Transmisi** | Prima / Normal / Kasar / Butuh Servis Besar | 0% s/d -30% |
+| 8  | **Kondisi Ban Mobil** | Tebal & Baru / Normal / Botak | 0% s/d -5% |
+| 9  | **Riwayat Servis Bengkel** | Rutin Resmi / Rutin Biasa / Jarang Servis | **+3% Bonus Nilai** s/d -6% |
+| 10 | **Modifikasi Kendaraan** | Standar Pabrik / Ringan / Berat (Permanen) | 0% s/d -8% |
