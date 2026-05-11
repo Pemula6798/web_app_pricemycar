@@ -242,16 +242,68 @@ def predict_price(form_data: dict) -> dict:
     """
     load_artifacts()
 
-    brand   = form_data.get('brand', '').strip()
-    model_n = form_data.get('model', '').strip()
-    year    = int(form_data.get('year', 2020))
-    km      = float(form_data.get('mileage', 50000))
-    fuel    = form_data.get('fuel_type', 'Petrol')
-    trans   = form_data.get('transmission', 'Manual')
-    seller  = form_data.get('seller_type', 'Individual')
-    owner   = form_data.get('owner', 'First Owner')
+    orig_brand = form_data.get('brand', '').strip()
+    orig_model = form_data.get('model', '').strip()
+    year       = int(form_data.get('year', 2020))
+    km         = float(form_data.get('mileage', 50000))
+    fuel       = form_data.get('fuel_type', 'Petrol')
+    trans      = form_data.get('transmission', 'Manual')
+    seller     = form_data.get('seller_type', 'Individual')
+    owner      = form_data.get('owner', 'First Owner')
+
+    # Indonesian Car Mapping System
+    brand   = orig_brand
+    model_n = orig_model
+    input_key = f"{brand.lower()} {model_n.lower()}".strip()
+    
+    INDONESIAN_CAR_MAP = {
+        'toyota avanza': ('Maruti', 'Ertiga'),
+        'toyota xenia': ('Maruti', 'Ertiga'),
+        'toyota calya': ('Maruti', 'Wagon'),
+        'toyota agya': ('Maruti', 'Alto'),
+        'toyota rush': ('Ford', 'EcoSport'),
+        'toyota yaris': ('Hyundai', 'i20'),
+        'toyota vios': ('Hyundai', 'Verna'),
+        'toyota fortuner': ('Toyota', 'Fortuner'),
+        'toyota innova': ('Toyota', 'Innova'),
+        'toyota corolla': ('Toyota', 'Corolla'),
+        'daihatsu xenia': ('Maruti', 'Ertiga'),
+        'daihatsu ayla': ('Maruti', 'Alto'),
+        'daihatsu sigra': ('Maruti', 'Wagon'),
+        'daihatsu terios': ('Ford', 'EcoSport'),
+        'daihatsu sirion': ('Hyundai', 'i10'),
+        'honda brio': ('Hyundai', 'i10'),
+        'honda jazz': ('Hyundai', 'i20'),
+        'honda hr-v': ('Hyundai', 'Creta'),
+        'honda cr-v': ('Mahindra', 'XUV500'),
+        'honda civic': ('Hyundai', 'Verna'),
+        'honda city': ('Honda', 'City'),
+        'honda mobilio': ('Maruti', 'Ertiga'),
+        'mitsubishi xpander': ('Maruti', 'Ertiga'),
+        'mitsubishi pajero': ('Toyota', 'Fortuner'),
+        'mitsubishi mirage': ('Hyundai', 'i10'),
+        'suzuki ertiga': ('Maruti', 'Ertiga'),
+        'suzuki swift': ('Maruti', 'Swift'),
+        'suzuki baleno': ('Maruti', 'Baleno'),
+        'suzuki ignis': ('Maruti', 'Ignis'),
+        'nissan grand livina': ('Maruti', 'Ertiga'),
+        'nissan march': ('Hyundai', 'i10'),
+    }
+
+    mapped = False
+    for ind_key, ind_val in INDONESIAN_CAR_MAP.items():
+        if ind_key in input_key or input_key in ind_key:
+            brand, model_n = ind_val
+            mapped = True
+            break
+
+    if not mapped:
+        if brand.lower() == 'suzuki':
+            brand = 'Maruti'
 
     brand_model_str = f"{brand} {model_n}"
+    orig_brand_model_str = f"{orig_brand} {orig_model}"
+    
     car_age   = 2025 - year
     km_per_yr = km / (car_age + 1)
     age_x_km  = car_age * km
@@ -289,8 +341,17 @@ def predict_price(form_data: dict) -> dict:
     base_price_inr = float(np.expm1(log_pred))
     
     EXCHANGE_RATE_INR_TO_IDR = 190.0
-    INDONESIA_MARKET_MULTIPLIER = 1.45
-    base_price = base_price_inr * EXCHANGE_RATE_INR_TO_IDR * INDONESIA_MARKET_MULTIPLIER
+    raw_price_idr = base_price_inr * EXCHANGE_RATE_INR_TO_IDR
+
+    # Dynamic Indonesia Market Calibration
+    if raw_price_idr < 150000000:
+        INDONESIA_MARKET_MULTIPLIER = 1.40
+    elif raw_price_idr < 250000000:
+        INDONESIA_MARKET_MULTIPLIER = 1.15
+    else:
+        INDONESIA_MARKET_MULTIPLIER = 0.88
+
+    base_price = raw_price_idr * INDONESIA_MARKET_MULTIPLIER
 
     # Confidence interval estimate (~±15% from model RMSE)
     ci_low  = base_price * 0.87
@@ -311,7 +372,7 @@ def predict_price(form_data: dict) -> dict:
         'ai_model':        'HistGradientBoosting Regressor',
         'accuracy_r2':     '93.4%',
         'inputs': {
-            'brand_model': brand_model_str,
+            'brand_model': orig_brand_model_str,
             'year':        year,
             'km':          int(km),
             'fuel':        fuel,

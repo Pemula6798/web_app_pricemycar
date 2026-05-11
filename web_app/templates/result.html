@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Prediction Result — PriceMyCar{% endblock %}
+{% block title %}Prediction Result - PriceMyCar{% endblock %}
 
 {% block content %}
 <section class="result-page">
@@ -25,7 +25,7 @@
           {% endif %}
 
           <div class="price-range">
-            Expected range: Rp {{ "{:,.0f}".format(result.ci_low) }} – Rp {{ "{:,.0f}".format(result.ci_high) }}
+            Expected range: Rp {{ "{:,.0f}".format(result.ci_low) }} - Rp {{ "{:,.0f}".format(result.ci_high) }}
           </div>
         </div>
 
@@ -58,7 +58,7 @@
           <div class="factor positive">
             <div class="factor-label">Positive Impact</div>
             <p>
-              {% if result.inputs.km < 60000 %}Low mileage ({{ "{:,}".format(result.inputs.km) }} mi) adds value.{% endif %}
+              {% if result.inputs.km < 60000 %}Low mileage ({{ "{:,}".format(result.inputs.km) }} KM) adds value.{% endif %}
               {% if result.inputs.owner == 'First Owner' %}First-owner history is a strong positive signal.{% endif %}
               {% if result.inputs.transmission == 'Automatic' %}Automatic transmission commands a premium.{% endif %}
             </p>
@@ -71,7 +71,7 @@
                 Physical condition deductions total −{{ result.condition.total_penalty_pct }}%.
               {% endif %}
               {% if result.inputs.km > 80000 %}
-                High mileage ({{ "{:,}".format(result.inputs.km) }} mi) reduces value.
+                High mileage ({{ "{:,}".format(result.inputs.km) }} KM) reduces value.
               {% endif %}
             </p>
           </div>
