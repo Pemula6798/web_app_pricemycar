@@ -256,50 +256,99 @@ def predict_price(form_data: dict) -> dict:
     model_n = orig_model
     input_key = f"{brand.lower()} {model_n.lower()}".strip()
     
-    INDONESIAN_CAR_MAP = {
-        'toyota avanza': ('Maruti', 'Ertiga'),
-        'toyota xenia': ('Maruti', 'Ertiga'),
-        'toyota calya': ('Maruti', 'Wagon'),
-        'toyota agya': ('Maruti', 'Alto'),
-        'toyota rush': ('Ford', 'EcoSport'),
-        'toyota yaris': ('Hyundai', 'i20'),
-        'toyota vios': ('Hyundai', 'Verna'),
-        'toyota fortuner': ('Toyota', 'Fortuner'),
-        'toyota innova': ('Toyota', 'Innova'),
-        'toyota corolla': ('Toyota', 'Corolla'),
-        'daihatsu xenia': ('Maruti', 'Ertiga'),
-        'daihatsu ayla': ('Maruti', 'Alto'),
-        'daihatsu sigra': ('Maruti', 'Wagon'),
-        'daihatsu terios': ('Ford', 'EcoSport'),
-        'daihatsu sirion': ('Hyundai', 'i10'),
-        'honda brio': ('Hyundai', 'i10'),
-        'honda jazz': ('Hyundai', 'i20'),
-        'honda hr-v': ('Hyundai', 'Creta'),
-        'honda cr-v': ('Mahindra', 'XUV500'),
-        'honda civic': ('Hyundai', 'Verna'),
-        'honda city': ('Honda', 'City'),
-        'honda mobilio': ('Maruti', 'Ertiga'),
-        'mitsubishi xpander': ('Maruti', 'Ertiga'),
-        'mitsubishi pajero': ('Toyota', 'Fortuner'),
-        'mitsubishi mirage': ('Hyundai', 'i10'),
-        'suzuki ertiga': ('Maruti', 'Ertiga'),
-        'suzuki swift': ('Maruti', 'Swift'),
-        'suzuki baleno': ('Maruti', 'Baleno'),
-        'suzuki ignis': ('Maruti', 'Ignis'),
-        'nissan grand livina': ('Maruti', 'Ertiga'),
-        'nissan march': ('Hyundai', 'i10'),
-    }
+    # 🌟 LUXURY BRAND MAPPING & TAX SEGMENTATION SYSTEM (PPnBM Correction)
+    is_luxury = False
+    luxury_brands_list = ['mercedes', 'bmw', 'audi', 'jaguar', 'porsche', 'lexus', 'volvo', 'land', 'rover']
+    if any(x in brand.lower() for x in luxury_brands_list):
+        is_luxury = True
+        if 'mercedes' in brand.lower():
+            brand = 'Mercedes-Benz'
+            if any(x in model_n.lower() for x in ['glc', 'gle', 'gla', 'gls', 'ml', 'm-class', 'gl-class']):
+                model_n = 'M-Class'
+            else:
+                model_n = 'E-Class'
+        elif 'bmw' in brand.lower():
+            brand = 'BMW'
+            if 'x' in model_n.lower():
+                model_n = 'X1'
+            elif '3' in model_n.lower():
+                model_n = '3'
+            elif '5' in model_n.lower():
+                model_n = '5'
+            elif '7' in model_n.lower():
+                model_n = '7'
+            else:
+                model_n = '3'
+        elif 'audi' in brand.lower():
+            brand = 'Audi'
+            if 'q' in model_n.lower():
+                if '5' in model_n.lower() or '7' in model_n.lower() or '8' in model_n.lower():
+                    model_n = 'Q5'
+                else:
+                    model_n = 'Q3'
+            else:
+                if '4' in model_n.lower():
+                    model_n = 'A4'
+                elif '6' in model_n.lower():
+                    model_n = 'A6'
+                elif '8' in model_n.lower():
+                    model_n = 'A8'
+                else:
+                    model_n = 'A4'
+        elif 'jaguar' in brand.lower():
+            brand = 'Jaguar'
+            if 'xj' in model_n.lower() or 'f-type' in model_n.lower():
+                model_n = 'XJ'
+            else:
+                model_n = 'XF'
+        elif any(x in brand.lower() for x in ['land', 'range', 'rover']):
+            brand = 'Land'
+            model_n = 'Rover'
+    else:
+        INDONESIAN_CAR_MAP = {
+            'toyota avanza': ('Maruti', 'Ertiga'),
+            'toyota xenia': ('Maruti', 'Ertiga'),
+            'toyota calya': ('Maruti', 'Wagon'),
+            'toyota agya': ('Maruti', 'Alto'),
+            'toyota rush': ('Ford', 'EcoSport'),
+            'toyota yaris': ('Hyundai', 'i20'),
+            'toyota vios': ('Hyundai', 'Verna'),
+            'toyota fortuner': ('Toyota', 'Fortuner'),
+            'toyota innova': ('Toyota', 'Innova'),
+            'toyota corolla': ('Toyota', 'Corolla'),
+            'daihatsu xenia': ('Maruti', 'Ertiga'),
+            'daihatsu ayla': ('Maruti', 'Alto'),
+            'daihatsu sigra': ('Maruti', 'Wagon'),
+            'daihatsu terios': ('Ford', 'EcoSport'),
+            'daihatsu sirion': ('Hyundai', 'i10'),
+            'honda brio': ('Hyundai', 'i10'),
+            'honda jazz': ('Hyundai', 'i20'),
+            'honda hr-v': ('Hyundai', 'Creta'),
+            'honda cr-v': ('Mahindra', 'XUV500'),
+            'honda civic': ('Hyundai', 'Verna'),
+            'honda city': ('Honda', 'City'),
+            'honda mobilio': ('Maruti', 'Ertiga'),
+            'mitsubishi xpander': ('Maruti', 'Ertiga'),
+            'mitsubishi pajero': ('Toyota', 'Fortuner'),
+            'mitsubishi mirage': ('Hyundai', 'i10'),
+            'suzuki ertiga': ('Maruti', 'Ertiga'),
+            'suzuki swift': ('Maruti', 'Swift'),
+            'suzuki baleno': ('Maruti', 'Baleno'),
+            'suzuki ignis': ('Maruti', 'Ignis'),
+            'nissan grand livina': ('Maruti', 'Ertiga'),
+            'nissan march': ('Hyundai', 'i10'),
+        }
 
-    mapped = False
-    for ind_key, ind_val in INDONESIAN_CAR_MAP.items():
-        if ind_key in input_key or input_key in ind_key:
-            brand, model_n = ind_val
-            mapped = True
-            break
+        mapped = False
+        for ind_key, ind_val in INDONESIAN_CAR_MAP.items():
+            if ind_key in input_key or input_key in ind_key:
+                brand, model_n = ind_val
+                mapped = True
+                break
 
-    if not mapped:
-        if brand.lower() == 'suzuki':
-            brand = 'Maruti'
+        if not mapped:
+            if brand.lower() == 'suzuki':
+                brand = 'Maruti'
 
     brand_model_str = f"{brand} {model_n}"
     orig_brand_model_str = f"{orig_brand} {orig_model}"
@@ -343,13 +392,19 @@ def predict_price(form_data: dict) -> dict:
     EXCHANGE_RATE_INR_TO_IDR = 190.0
     raw_price_idr = base_price_inr * EXCHANGE_RATE_INR_TO_IDR
 
-    # Dynamic Indonesia Market Calibration
-    if raw_price_idr < 150000000:
-        INDONESIA_MARKET_MULTIPLIER = 1.40
-    elif raw_price_idr < 250000000:
-        INDONESIA_MARKET_MULTIPLIER = 1.15
+    # Dynamic Indonesia Market Calibration (PPnBM Luxury Tax Correction)
+    if is_luxury:
+        if car_age <= 5: # year >= 2020
+            INDONESIA_MARKET_MULTIPLIER = 2.06
+        else:
+            INDONESIA_MARKET_MULTIPLIER = 1.35
     else:
-        INDONESIA_MARKET_MULTIPLIER = 1.12
+        if raw_price_idr < 150000000:
+            INDONESIA_MARKET_MULTIPLIER = 1.40
+        elif raw_price_idr < 250000000:
+            INDONESIA_MARKET_MULTIPLIER = 1.15
+        else:
+            INDONESIA_MARKET_MULTIPLIER = 1.12
 
     base_price = raw_price_idr * INDONESIA_MARKET_MULTIPLIER
 
