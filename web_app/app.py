@@ -1,18 +1,17 @@
 """
-PriceMyCar — Flask Backend
-==========================
+PriceMyCar - Flask Backend
+=============================================================
 Routes:
-  GET  /                    → Landing page
-  GET  /predict             → Predict form
-  POST /predict             → Run prediction → redirect to result
-  GET  /result/<id>         → Prediction result page
-  GET  /data-insights       → Market insights dashboard
-  GET  /model-info          → Under the hood page
-  GET  /about               → About page
-  POST /api/predict         → JSON API endpoint (for AJAX)
+  GET  /                    -> Landing page
+  GET  /predict             -> Predict form
+  POST /predict             -> Run prediction -> redirect to result
+  GET  /result/<id>         -> Prediction result page
+  GET  /data-insights       -> Market insights dashboard
+  GET  /model-info          -> Under the hood page
+  GET  /about               -> About page
+  POST /api/predict         -> JSON API endpoint (for AJAX)
 
-Professor's suggestion implemented:
-  Condition Adjustment System → calculate_condition_penalty()
+  Condition Adjustment System -> calculate_condition_penalty()
   Factors: body damage, dents, paint, interior, accident,
            flood, engine, tires, service history, mods
 """
@@ -27,9 +26,9 @@ from flask import (Flask, render_template, request,
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'pricemycar-dev-secret')
 
-# ─────────────────────────────────────────────────────────────
-# Model Loading (lazy — loaded once on first predict request)
-# ─────────────────────────────────────────────────────────────
+# =============================================================
+# Model Loading (lazy - loaded once on first predict request)
+# =============================================================
 _model         = None
 _encoder       = None
 _brand_freq    = None
@@ -44,12 +43,12 @@ def load_artifacts():
         _feature_cols = joblib.load('feature_columns.pkl')
 
 
-# ─────────────────────────────────────────────────────────────
+# =============================================================
 # Condition Penalty System
-# (Professor's suggestion — factors outside the dataset)
-# ─────────────────────────────────────────────────────────────
+# 
+# =============================================================
 CONDITION_PENALTIES = {
-    # ── Body / Physical Damage ──────────────────────────────
+    # Body / Physical Damage
     # Severity level: 0=none, 1=minor scratches, 2=moderate dents, 3=severe
     'body_damage_severity': {
         0: 0.00,   # No damage
@@ -61,7 +60,7 @@ CONDITION_PENALTIES = {
     'dent_count_penalty_per_unit': 0.02,
     'dent_count_max_penalty': 0.15,
 
-    # ── Paint Condition ─────────────────────────────────────
+    # Paint Condition
     'paint_condition': {
         'excellent': 0.00,
         'good':      0.02,
@@ -69,7 +68,7 @@ CONDITION_PENALTIES = {
         'poor':      0.13,   # Peeling, heavy oxidation
     },
 
-    # ── Interior Condition ──────────────────────────────────
+    # Interior Condition
     'interior_condition': {
         'excellent': 0.00,
         'good':      0.02,
@@ -77,15 +76,15 @@ CONDITION_PENALTIES = {
         'poor':      0.15,   # Torn seats, damaged dashboard
     },
 
-    # ── Accident History ────────────────────────────────────
+    # Accident History
     'accident_history': {
         'none':       0.00,
         'minor':      0.08,   # Minor accident, properly repaired
-        'moderate':   0.20,   # Moderate — airbag deployed / frame checked
+        'moderate':   0.20,   # Moderate - airbag deployed / frame checked
         'major':      0.40,   # Major accident / total-loss history
     },
 
-    # ── Flood / Water Damage ────────────────────────────────
+    # Flood / Water Damage
     # Even "repaired" flood damage carries long-term electrical risk
     'flood_damage': {
         'none':     0.00,
@@ -93,33 +92,33 @@ CONDITION_PENALTIES = {
         'severe':   0.50,    # Engine bay / electrical affected
     },
 
-    # ── Engine & Mechanical ─────────────────────────────────
+    # Engine & Mechanical
     'engine_condition': {
         'excellent': 0.00,
         'good':      0.03,
-        'fair':      0.10,   # Minor issues — needs attention
+        'fair':      0.10,   # Minor issues - needs attention
         'poor':      0.30,   # Major repair needed
     },
 
-    # ── Tire Condition ──────────────────────────────────────
+    # Tire Condition
     'tire_condition': {
         'good':     0.00,    # >50% tread remaining
         'worn':     0.03,    # 20–50% tread
         'bald':     0.05,    # Needs immediate replacement
     },
 
-    # ── Service / Maintenance History ───────────────────────
+    # Service / Maintenance History
     'service_history': {
         'complete':  -0.03,  # Complete records = value BONUS
         'partial':   0.00,
         'none':      0.06,   # No records = buyers discount it
     },
 
-    # ── Modifications ───────────────────────────────────────
+    # Modifications
     # Non-stock mods reduce market pool (not every buyer wants them)
     'modification_status': {
         'stock':           0.00,
-        'cosmetic_minor':  0.02,  # Tint, stickers — minor
+        'cosmetic_minor':  0.02,  # Tint, stickers - minor
         'cosmetic_major':  0.05,  # Body kit, paint wrap
         'performance':     0.04,  # Voids warranty concern
         'non_reversible':  0.08,  # Cut chassis, etc.
@@ -233,9 +232,9 @@ def calculate_condition_penalty(form_data: dict) -> dict:
     }
 
 
-# ─────────────────────────────────────────────────────────────
+# =============================================================
 # ML Prediction
-# ─────────────────────────────────────────────────────────────
+# =============================================================
 def predict_price(form_data: dict) -> dict:
     """
     Run ML prediction then apply condition penalty.
@@ -285,12 +284,13 @@ def predict_price(form_data: dict) -> dict:
     # Align columns with training
     row = row.reindex(columns=_feature_cols, fill_value=0)
 
-    # Predict in log-space, inverse to INR, then convert to IDR (1 INR ≈ 190 IDR)
+    # Predict in log-space, inverse to INR, then convert to IDR
     log_pred  = _model.predict(row)[0]
     base_price_inr = float(np.expm1(log_pred))
     
     EXCHANGE_RATE_INR_TO_IDR = 190.0
-    base_price = base_price_inr * EXCHANGE_RATE_INR_TO_IDR
+    INDONESIA_MARKET_MULTIPLIER = 1.45
+    base_price = base_price_inr * EXCHANGE_RATE_INR_TO_IDR * INDONESIA_MARKET_MULTIPLIER
 
     # Confidence interval estimate (~±15% from model RMSE)
     ci_low  = base_price * 0.87
@@ -308,7 +308,7 @@ def predict_price(form_data: dict) -> dict:
         'ci_low':          round(adj_low),
         'ci_high':         round(adj_high),
         'condition':       condition,
-        'ai_model':        'Gradient Boosting Regressor',
+        'ai_model':        'HistGradientBoosting Regressor',
         'accuracy_r2':     '93.4%',
         'inputs': {
             'brand_model': brand_model_str,
@@ -322,15 +322,15 @@ def predict_price(form_data: dict) -> dict:
     }
 
 
-# ─────────────────────────────────────────────────────────────
+# =============================================================
 # In-memory result store (use Redis/DB in production)
-# ─────────────────────────────────────────────────────────────
+# =============================================================
 _results_store: dict = {}
 
 
-# ─────────────────────────────────────────────────────────────
+# =============================================================
 # Routes
-# ─────────────────────────────────────────────────────────────
+# =============================================================
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -390,7 +390,7 @@ def api_predict():
 
 @app.route('/api/condition-factors', methods=['GET'])
 def api_condition_factors():
-    """Return the full condition penalty table — useful for frontend dropdowns."""
+    """Return the full condition penalty table. Useful for frontend dropdowns."""
     return jsonify(CONDITION_PENALTIES)
 
 

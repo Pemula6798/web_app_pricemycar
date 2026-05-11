@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}About — PriceMyCar{% endblock %}
+{% block title %}About - PriceMyCar{% endblock %}
 {% block content %}
 <section class="about-page">
   <h1>About PriceMyCar</h1>
@@ -10,27 +10,27 @@
       <h2>The Problem</h2>
       <p>The used car market is notoriously opaque. Buyers often overpay due to information asymmetry, while sellers struggle to price their vehicles competitively without leaving money on the table.</p>
       <h2 style="margin-top:24px">Our Solution</h2>
-      <p>We built PriceMyCar to bridge this gap. By leveraging a dataset of 4,340 historical transactions and applying advanced machine learning techniques (Gradient Boosting Regressor + 10-factor condition scoring), we provide real-time, highly accurate valuations that reflect the true state of the market today.</p>
-      <h2 style="margin-top:24px">Professor's Contribution</h2>
-      <p>The <strong>Condition Adjustment System</strong> was proposed by our academic supervisor to address a key limitation: ML models trained on listing data cannot account for physical state at point-of-sale. Our 10-factor penalty model fills this gap using empirical depreciation research.</p>
+      <p>We built PriceMyCar to bridge this gap. By leveraging a dataset of 4,340 historical transactions and applying advanced machine learning techniques (HistGradientBoosting Regressor + 10-factor condition scoring), we provide real-time, highly accurate valuations that reflect the true state of the market today.</p>
+      <h2 style="margin-top:24px">Contribution</h2>
+      <p>The <strong>Condition Adjustment System</strong> was proposed to address a key limitation: ML models trained on listing data cannot account for physical state at point-of-sale. Our 10-factor penalty model fills this gap using empirical depreciation research.</p>
     </div>
     <div class="dataset-card">
       <h2>The Dataset</h2>
       <p style="font-size:.8rem;color:#64748B;margin-bottom:16px">CarDekho India used car listings (Kaggle)</p>
       <div class="dataset-row"><span>Total Records</span><span>4,340</span></div>
-      <div class="dataset-row"><span>Date Range</span><span>2001–2021</span></div>
+      <div class="dataset-row"><span>Date Range</span><span>2001-2021</span></div>
       <div class="dataset-row"><span>Base Features</span><span>8 variables</span></div>
       <div class="dataset-row"><span>Engineered Features</span><span>17 total</span></div>
-      <div class="dataset-row"><span>Best Model</span><span>Gradient Boosting</span></div>
+      <div class="dataset-row"><span>Best Model</span><span>HistGradientBoosting Regressor</span></div>
     </div>
   </div>
 
   <h2 class="section-heading" style="margin-bottom:24px">Meet the Team</h2>
   <div class="team-grid">
-    <div class="team-card"><div class="team-avatar">👨‍💻</div><h4>ALDEEZA PRADITHA EFENDI</h4><span>Student @ BINUS University</span></div>
-    <div class="team-card"><div class="team-avatar">👨‍💻</div><h4>CRISWINCENT ENRICO GERALDY</h4><span>Student @ BINUS University</span></div>
-    <div class="team-card"><div class="team-avatar">👨‍💻</div><h4>GREGORIO KEEFE JASON S</h4><span>Student @ BINUS University</span></div>
-    <div class="team-card"><div class="team-avatar">👨‍💻</div><h4>RAFAEL SACCHI</h4><span>Student @ BINUS University</span></div>
+    <div class="team-card"><div class="team-avatar"></div><h4>ALDEEZA PRADITHA EFENDI</h4><span>Student @ BINUS University</span></div>
+    <div class="team-card"><div class="team-avatar"></div><h4>CRISWINCENT ENRICO GERALDY</h4><span>Student @ BINUS University</span></div>
+    <div class="team-card"><div class="team-avatar"></div><h4>GREGORIO KEEFE JASON S</h4><span>Student @ BINUS University</span></div>
+    <div class="team-card"><div class="team-avatar"></div><h4>RAFAEL SACCHI</h4><span>Student @ BINUS University</span></div>
   </div>
 </section>
 {% endblock %}
