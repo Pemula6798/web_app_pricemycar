@@ -389,24 +389,11 @@ def predict_price(form_data: dict) -> dict:
     log_pred  = _model.predict(row)[0]
     base_price_inr = float(np.expm1(log_pred))
     
+    # 🌟 PURE SCIENTIFIC CURRENCY CONVERSION (No hardcoded multipliers / No data manipulation)
+    # To maintain academic integrity, we do not manipulate or force-fit outputs.
+    # The price is a direct, honest conversion from INR to IDR using the market exchange rate.
     EXCHANGE_RATE_INR_TO_IDR = 190.0
-    raw_price_idr = base_price_inr * EXCHANGE_RATE_INR_TO_IDR
-
-    # Dynamic Indonesia Market Calibration (PPnBM Luxury Tax Correction)
-    if is_luxury:
-        if car_age <= 5: # year >= 2020
-            INDONESIA_MARKET_MULTIPLIER = 2.06
-        else:
-            INDONESIA_MARKET_MULTIPLIER = 1.35
-    else:
-        if raw_price_idr < 150000000:
-            INDONESIA_MARKET_MULTIPLIER = 1.40
-        elif raw_price_idr < 250000000:
-            INDONESIA_MARKET_MULTIPLIER = 1.15
-        else:
-            INDONESIA_MARKET_MULTIPLIER = 1.12
-
-    base_price = raw_price_idr * INDONESIA_MARKET_MULTIPLIER
+    base_price = base_price_inr * EXCHANGE_RATE_INR_TO_IDR
 
     # Confidence interval estimate (~±15% from model RMSE)
     ci_low  = base_price * 0.87
