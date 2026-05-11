@@ -349,7 +349,7 @@ def predict_price(form_data: dict) -> dict:
     elif raw_price_idr < 250000000:
         INDONESIA_MARKET_MULTIPLIER = 1.15
     else:
-        INDONESIA_MARKET_MULTIPLIER = 0.88
+        INDONESIA_MARKET_MULTIPLIER = 1.12
 
     base_price = raw_price_idr * INDONESIA_MARKET_MULTIPLIER
 
