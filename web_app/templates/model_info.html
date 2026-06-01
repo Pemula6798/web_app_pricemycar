@@ -2,46 +2,46 @@
 {% block title %}Model Info - PriceMyCar{% endblock %}
 {% block content %}
 <section class="model-page">
-  <h1>Cara Kerja Sistem</h1>
-  <p class="section-sub">Pelajari bagaimana kecerdasan buatan (AI) kami menganalisis data untuk memberikan taksiran harga mobil bekas terbaik.</p>
+  <h1>How It Works</h1>
+  <p class="section-sub">Learn how our predictive AI analyzes vehicle data to estimate the best market price.</p>
 
-  <h2 style="margin-top:40px;font-size:1.1rem;font-weight:600">Alur Kerja Sistem (Pipeline)</h2>
+  <h2 style="margin-top:40px;font-size:1.1rem;font-weight:600">Prediction Pipeline</h2>
   <div class="pipeline">
-    <div class="pipe-step"><div class="pipe-icon">📝</div><h4>1. Input Data</h4><p>Pengguna memasukkan spesifikasi mobil (merek, tahun, transmisi, dll.).</p></div>
-    <div class="pipe-step"><div class="pipe-icon">🔍</div><h4>2. Analisis Kondisi</h4><p>Sistem menghitung persen potongan harga dari 10 parameter kondisi fisik.</p></div>
-    <div class="pipe-step active"><div class="pipe-icon" style="color:#fff">⚙️</div><h4>3. Taksiran AI</h4><p>Mesin kecerdasan buatan mencocokkan data dengan pola harga pasar.</p></div>
-    <div class="pipe-step"><div class="pipe-icon">💵</div><h4>4. Hasil Taksiran</h4><p>Menampilkan estimasi harga pasar di Indonesia dan analisis deviasi.</p></div>
+    <div class="pipe-step"><div class="pipe-icon">📝</div><h4>1. Input Data</h4><p>You provide details like brand, model, year, and transmission.</p></div>
+    <div class="pipe-step"><div class="pipe-icon">🔍</div><h4>2. Condition Analysis</h4><p>The system calculates deductions based on 10 physical factors.</p></div>
+    <div class="pipe-step active"><div class="pipe-icon" style="color:#fff">⚙️</div><h4>3. AI Valuation</h4><p>Our predictive AI matches your inputs with real-world market patterns.</p></div>
+    <div class="pipe-step"><div class="pipe-icon">💵</div><h4>4. Price Estimation</h4><p>The app generates a price estimate and a detailed deviation analysis.</p></div>
   </div>
 
   <div class="algo-metrics">
     <div class="algo-section">
-      <h2>Sistem Prediksi AI</h2>
-      <p>PriceMyCar menggunakan teknologi <strong>Kecerdasan Buatan (AI) Prediktif</strong> yang bekerja seperti penilai mobil profesional digital. AI ini telah mempelajari pola transaksi dari ribuan data penjualan mobil bekas di dunia nyata.</p>
-      <p>Berbeda dengan rumus matematika biasa yang kaku, AI kami dapat mengenali pola penyusutan harga yang dinamis—misalnya, bagaimana penurunan harga mobil mewah jauh lebih drastis dibandingkan mobil keluarga ekonomis seiring bertambahnya kilometer pemakaian.</p>
-      <h3 style="margin-top:20px;font-size:.9rem;font-weight:600">Parameter Utama yang Dinilai AI:</h3>
+      <h2>AI Prediction System</h2>
+      <p>PriceMyCar uses **Predictive AI technology** that acts as a digital professional car appraiser. This AI has learned from thousands of real-world used car sales transactions.</p>
+      <p>Unlike rigid mathematical formulas, our AI recognizes complex depreciation trends—for example, how the value of a luxury vehicle drops much faster than an economy family car as mileage increases.</p>
+      <h3 style="margin-top:20px;font-size:.9rem;font-weight:600">Key Parameters Evaluated by AI:</h3>
       <ul class="feature-list">
-        <li><strong>Merek &amp; Model Mobil:</strong> Menganalisis tingkat popularitas dan nilai pasar dari model mobil Anda.</li>
-        <li><strong>Tahun Pembuatan / Umur Mobil:</strong> Menghitung dampak penyusutan nilai tahunan kendaraan secara alami.</li>
-        <li><strong>Jarak Tempuh (Kilometer):</strong> Mengukur tingkat pemakaian fisik dan keausan mekanis mobil.</li>
-        <li><strong>Bahan Bakar &amp; Transmisi:</strong> Membandingkan nilai pasar tipe transmisi (manual vs. otomatis) serta jenis bahan bakar.</li>
-        <li><strong>Jumlah Pemilik Sebelumnya:</strong> Menilai dampak riwayat kepemilikan (tangan pertama, tangan kedua, dst.).</li>
-        <li><strong>Frekuensi Pemakaian Tahunan:</strong> Mengidentifikasi apakah mobil jarang digunakan atau terlalu sering jalan jauh.</li>
-        <li><strong>Skor Kondisi Fisik:</strong> Mengintegrasikan 10 kriteria kondisi fisik (bodi, mesin, interior, ban, dll.).</li>
+        <li><strong>Brand &amp; Model:</strong> Analyzes the market popularity and demand of your specific car model.</li>
+        <li><strong>Year of Production:</strong> Evaluates natural annual depreciation based on the car's age.</li>
+        <li><strong>Mileage (Odometer):</strong> Measures physical wear and tear from vehicle usage.</li>
+        <li><strong>Fuel &amp; Transmission:</strong> Compares market preference for automatic vs. manual transmissions and fuel types.</li>
+        <li><strong>Ownership History:</strong> Assesses the impact of past owners (first owner, second owner, etc.).</li>
+        <li><strong>Usage Frequency:</strong> Identifies whether the vehicle was rarely driven or heavily used.</li>
+        <li><strong>Physical Condition Score:</strong> Integrates the 10-factor physical evaluation (body, interior, engine, tires, etc.).</li>
       </ul>
     </div>
     <div class="metrics-section">
-      <h2>Tingkat Keandalan AI</h2>
+      <h2>AI Valuation Metrics</h2>
       <div class="metric-row">
-        <div><div class="metric-name">Akurasi Prediksi AI</div><div class="metric-desc">Tingkat kecocokan taksiran AI dalam membaca dan memprediksi faktor-faktor penentu harga pasaran mobil bekas secara tepat.</div></div>
+        <div><div class="metric-name">AI Valuation Accuracy</div><div class="metric-desc">How accurately the AI reads and predicts key used car price factors based on real market data.</div></div>
         <div class="metric-val">92%+</div>
       </div>
       <div class="metric-row">
-        <div><div class="metric-name">Rata-Rata Selisih Harga</div><div class="metric-desc">Batas toleransi wajar (rata-rata error) antara taksiran AI dengan harga transaksi aktual di pasar Indonesia.</div></div>
-        <div class="metric-val" style="color:var(--green)">~Rp 25 Juta</div>
+        <div><div class="metric-name">Average Price Deviation</div><div class="metric-desc">The typical difference between the AI's estimate and the actual transaction price in the market.</div></div>
+        <div class="metric-val" style="color:var(--green)">~Rp 25 Million</div>
       </div>
       <div class="metric-row">
-        <div><div class="metric-name">Konsistensi Estimasi</div><div class="metric-desc">Jaminan kestabilan prediksi. Menunjukkan AI sangat stabil dan sangat jarang menghasilkan kesalahan taksiran harga yang jauh (ekstrim).</div></div>
-        <div class="metric-val" style="color:var(--green)">Sangat Tinggi</div>
+        <div><div class="metric-name">Estimation Consistency</div><div class="metric-desc">Confidence in pricing. Shows that the AI is stable and rarely produces extreme errors for most car models.</div></div>
+        <div class="metric-val" style="color:var(--green)">Very High</div>
       </div>
     </div>
   </div>

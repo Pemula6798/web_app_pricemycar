@@ -8,84 +8,123 @@ app_port: 7860
 pinned: false
 ---
 
-# 🚗 PriceMyCar — Panduan Lengkap Instalasi & Penggunaan
+# 🚗 PriceMyCar — Complete Setup & Usage Guide
 
-Selamat datang di **PriceMyCar**, sebuah aplikasi web premium berbasis sistem estimasi harga mobil bekas pintar yang memadukan **Algoritma Analisis Harga Historis** dengan **Sistem Penilaian Kondisi Fisik Kendaraan (10-Factor Condition Evaluation System)**.
+Welcome to **PriceMyCar**, a premium web application featuring an intelligent used car valuation system. It combines an **Empirical Price Estimation Model** with a **10-Factor Physical Condition Evaluation System**.
 
-Aplikasi ini dirancang dengan antarmuka modern yang sepenuhnya responsif, sehingga tampilannya sangat dinamis, premium, dan rapi baik saat dibuka melalui **PC/Laptop** maupun **HP (Mobile)**.
-
----
-
-## ⚡ Fitur Utama Aplikasi
-1. **Algoritma Estimasi Harga Empiris**: Menghitung harga dasar mobil secara objektif berdasarkan pola data transaksi pasar mobil bekas.
-2. **Sistem Koreksi Kondisi Fisik**: Melakukan kalibrasi harga yang presisi berdasarkan 10 kriteria kondisi fisik kendaraan secara nyata (seperti kerusakan bodi, riwayat banjir, kondisi mesin, interior, dll.).
-3. **Desain Antarmuka Premium & Responsif**: Menggunakan struktur grid modern dan efek transisi halus yang otomatis menyesuaikan ukuran layar perangkat (PC, Tablet, dan Smartphone).
-4. **Konversi Mata Uang Rupiah (IDR)**: Sistem konversi otomatis dengan visualisasi simbol mata uang Rp yang akurat.
+The app features a modern, fully responsive user interface designed to look premium and run smoothly on both **Desktop** and **Mobile** devices.
 
 ---
 
-## 💻 Panduan Menjalankan Aplikasi Secara Lokal (Local Setup)
+## ⚡ Key Features
+1. **Empirical Pricing Algorithm**: Automatically estimates the base car value based on historical sales transaction data.
+2. **Physical Condition Calibration**: Dynamically adjusts the base price using a 10-factor scoring system (body damage, paint, interior, accidents, flood history, etc.).
+3. **Premium & Responsive UI**: Uses a clean layout grid and smooth transitions optimized for all screen sizes.
+4. **Indonesian Rupiah (IDR) Conversion**: Integrates seamless currency rendering and local pricing adjustments.
 
-Ikuti langkah-langkah mudah berikut untuk menginstal dan menjalankan aplikasi PriceMyCar langsung di komputer atau laptop Anda:
+---
 
-### 1. Buka Terminal & Masuk ke Folder Web App
-Buka terminal (CMD / PowerShell / Bash) lalu arahkan ke direktori `web_app`:
+## 💻 Local Setup Guide
+
+Follow these steps to run PriceMyCar on your local machine:
+
+### 1. Open Terminal and Enter Web App Directory
+Navigate to the `web_app` directory:
 ```bash
 cd web_app
 ```
 
-### 2. Buat & Aktifkan Virtual Environment (Sangat Direkomendasikan)
-Gunakan Virtual Environment agar instalasi package rapi dan tidak mengganggu python sistem komputer Anda:
+### 2. Create and Activate Virtual Environment (Recommended)
+Set up a clean environment for python packages:
 
-*   **Untuk Pengguna Windows (Command Prompt / PowerShell):**
+*   **Windows (Command Prompt / PowerShell):**
     ```powershell
     python -m venv venv
     venv\Scripts\activate
     ```
 
-*   **Untuk Pengguna Mac / Linux (Terminal):**
+*   **Mac / Linux (Terminal):**
     ```bash
     python3 -m venv venv
     source venv/bin/activate
     ```
 
-### 3. Install Seluruh Dependensi Aplikasi
-Jalankan perintah berikut untuk menginstal semua modul yang diperlukan aplikasi:
+### 3. Install Dependencies
+Run the command below to install required python packages:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Jalankan Aplikasi
-Jalankan server lokal aplikasi menggunakan perintah:
+### 4. Run the Application
+Start the local web server:
 ```bash
 python app.py
 ```
 
-### 5. Buka Aplikasi di Browser
-Setelah server berjalan, buka browser kesayangan Anda dan akses alamat berikut:
+### 5. Open in Your Browser
+Access the running application:
 👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
 
 ---
 
-## 📊 Sistem Penilaian & Koreksi Kondisi Kendaraan (10-Factor)
+## 📊 10-Factor Vehicle Condition Scoring System
 
-Aplikasi ini mengintegrasikan logika penilaian kondisi fisik yang objektif. Harga akhir mobil diperoleh dari perhitungan berikut:
+The final car value is calculated by applying deductions based on the physical condition of the car:
 
 ```text
-Harga Akhir = Harga Estimasi Dasar × (1 - Total Persentase Pengurangan)
+Final Price = Base ML Price × (1 - Total Deduction Percentage)
 ```
 
-Sistem akan mengevaluasi **10 Faktor Fisik** berikut untuk mengukur persentase pengurangan nilai jual kendaraan secara adil:
+The system evaluates **10 Physical Factors** to determine the total deduction:
 
-| No | Faktor Kondisi | Pilihan Kondisi Pengguna | Dampak Terhadap Harga |
-|----|----------------|--------------------------|-----------------------|
-| 1  | **Tingkat Kerusakan Bodi** | Aman / Goresan Ringan / Penyok / Parah | 0% s/d -28% |
-| 2  | **Jumlah Penyok (Dents)** | Batasan input: 0 s/d 20 penyok | -2% per penyok (Max -15%) |
-| 3  | **Kondisi Cat Mobil** | Sangat Baik / Cukup Baik / Pudar / Rusak | 0% s/d -13% |
-| 4  | **Kondisi Interior & Dasbor** | Sangat Bersih / Bersih / Kotor / Sobek | 0% s/d -15% |
-| 5  | **Riwayat Kecelakaan** | Tidak Pernah / Ringan / Sedang / Parah | 0% s/d -40% |
-| 6  | **Riwayat Terendam Banjir** | Tidak Pernah / Setinggi Roda / Setinggi Dasbor | 0% s/d -50% |
-| 7  | **Kondisi Mesin & Transmisi** | Prima / Normal / Kasar / Butuh Servis Besar | 0% s/d -30% |
-| 8  | **Kondisi Ban Mobil** | Tebal & Baru / Normal / Botak | 0% s/d -5% |
-| 9  | **Riwayat Servis Bengkel** | Rutin Resmi / Rutin Biasa / Jarang Servis | **+3% Bonus Nilai** s/d -6% |
-| 10 | **Modifikasi Kendaraan** | Standar Pabrik / Ringan / Berat (Permanen) | 0% s/d -8% |
+| No | Condition Factor | User Selection Choices | Impact on Price |
+|----|------------------|------------------------|-----------------|
+| 1  | **Body Damage Severity** | None / Minor Scratches / Moderate Dents / Severe Damage | 0% to -28% |
+| 2  | **Number of Dents** | Input range: 0 to 20 dents | -2% per dent (Max -15%) |
+| 3  | **Paint Condition** | Excellent / Good / Fair (Faded) / Poor (Peeling) | 0% to -13% |
+| 4  | **Interior Condition** | Excellent / Good / Fair (Stained) / Poor (Torn) | 0% to -15% |
+| 5  | **Accident History** | None / Minor / Moderate / Major (Total Loss) | 0% to -40% |
+| 6  | **Flood Damage** | None / Minor (Carpet only) / Severe (Engine bay) | 0% to -50% |
+| 7  | **Engine & Mechanical** | Excellent / Good / Fair (Minor Issues) / Poor (Needs Overhaul) | 0% to -30% |
+| 8  | **Tire Condition** | Good (>50% tread) / Worn (20-50%) / Bald | 0% to -5% |
+| 9  | **Service History** | Complete Records / Partial / None | **+3% Bonus** to -6% |
+| 10 | **Modifications** | Stock / Minor Cosmetic / Major Cosmetic / Performance / Non-Reversible | 0% to -8% |
+
+---
+
+## 🇮🇩 Indonesian Market Adjustments & 2026 Inflation
+
+Since the base Machine Learning model was trained on historical Indian market data (CarDekho dataset in INR), we apply custom scaling to ensure predictions match the **Indonesian used car market in 2026**:
+
+### 1. Price Conversion Formula
+```text
+Base Rupiah Price = (Model Prediction in INR) × 2026 Exchange Rate × Market Multiplier
+Final Price = Base Rupiah Price × (1 - Total Physical Deduction)
+```
+
+### 2. Adjustment Parameters (June 2026)
+*   **Base Exchange Rate (INR to IDR)**: `1 INR = Rp 187.6` (reflecting current currency rates).
+*   **Rupiah Depreciation & Used Car Inflation**: A **+12% (1.12x)** adjustment is integrated into the multipliers to account for inflation in 2026.
+*   **Combined Market Multipliers**:
+    Applied to offset local luxury tax (PPnBM), BBN-KB, import duties, and brand demand in Indonesia:
+    
+    | Brand Category | Multiplier | Description & Examples |
+    |----------------|------------|------------------------|
+    | **Luxury Brands** | **1.95x** | Mercedes-Benz, BMW, Audi, Jaguar, Land Rover. Accounts for high luxury tax & CBU import duties. |
+    | **Popular Indonesian Brands** | **1.60x** | Toyota, Honda, Daihatsu, Suzuki, Mitsubishi. Strong resale value & brand demand. |
+    | **Other Brands** | **1.45x** | Chevrolet, Ford, Hyundai, Nissan, Renault, Datsun, etc. |
+
+### 3. Valuation Verification Sources
+Market multipliers are cross-referenced and calibrated against three major automotive portals:
+1.  **OLX Indonesia** (olx.co.id) - Private seller listings.
+2.  **Mobil123.com** - Showrooms and professional dealers.
+3.  **GridOto Pricelist** - Frequently updated automotive pricing index.
+
+---
+
+## ⚠️ Model Support Validation (Unregistered Models)
+
+The system automatically checks if the brand and model inputted are supported:
+*   **Supported Models**: Popular models mapped to the training database (e.g. Avanza, Brio, Xpander, Fortuner, Jazz). Predictions have high confidence.
+*   **Unregistered Models**: If you input a model not in our database (e.g. "Wuling Almaz", "Toyota Raize"), the system performs a general segment approximation based on year, transmission, fuel type, and mileage.
+    *   **Disclaimer Banner**: A prominent yellow **Warning** banner will be displayed at the top of the results page to inform the user that the accuracy of the prediction is limited.

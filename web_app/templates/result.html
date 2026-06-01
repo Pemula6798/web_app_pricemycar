@@ -12,8 +12,8 @@
     <div class="alert alert-warning">
       <div class="alert-icon">⚠️</div>
       <div class="alert-content">
-        <h4>Model Belum Didukung Penuh (Akurasi Terbatas)</h4>
-        <p>Model mobil <strong>{{ result.inputs.brand_model }}</strong> tidak terdaftar dalam database kami. Estimasi harga di bawah menggunakan segmentasi terdekat dan akurasinya mungkin kurang optimal (meleset).</p>
+        <h4>Model Not Fully Supported (Limited Accuracy)</h4>
+        <p>The car model <strong>{{ result.inputs.brand_model }}</strong> is not registered in our primary database. This estimate is based on the closest available segment approximation, and the actual price may vary.</p>
       </div>
     </div>
     {% endif %}
@@ -60,37 +60,37 @@
 
         <!-- Detailed Price Deviation & Indonesian Market Analysis -->
         <div class="analysis-card">
-          <h3>📊 Analisis Deviasi &amp; Penyesuaian Pasar Indonesia</h3>
+          <h3>📊 Price Deviation &amp; Indonesian Market Analysis</h3>
           
           <div class="analysis-section">
-            <h4>1. Penyesuaian Pasar Terkini (Juni 2026)</h4>
-            <p>Harga dasar hasil latih model di India disesuaikan dengan nilai Rupiah yang melemah serta tingkat inflasi pasar mobil bekas Indonesia tahun 2026 menggunakan pengali <strong>{{ result.market_multiplier }}x</strong> dan kurs dasar <strong>1 INR = Rp 187.6</strong>. Penyesuaian ini divalidasi silang terhadap kisaran harga di platform marketplace utama Indonesia: <strong>OLX Indonesia</strong>, <strong>Mobil123</strong>, dan <strong>Pricelist GridOto</strong>.</p>
+            <h4>1. Market Adjustments (June 2026)</h4>
+            <p>The base machine learning model trained on Indian data was converted using the exchange rate of <strong>1 INR = Rp 187.6</strong> and adjusted to the local Indonesian used car market with a <strong>{{ result.market_multiplier }}x</strong> multiplier (accounting for luxury tax/PPnBM, import tariffs, and 2026 inflation). This pricing is cross-referenced with major Indonesian automotive portals: <strong>OLX Indonesia</strong>, <strong>Mobil123</strong>, and <strong>GridOto Pricelist</strong>.</p>
           </div>
 
           <div class="analysis-section">
-            <h4>2. Kenapa Harga Jual Riil Bisa Meleset (Deviasi)?</h4>
-            <p>Model Machine Learning memberikan estimasi nilai objektif berdasarkan spesifikasi teknis, namun harga transaksi riil di lapangan dapat bervariasi karena faktor eksternal berikut:</p>
+            <h4>2. Why Real-World Prices May Deviate (Errors)</h4>
+            <p>The Machine Learning model estimates an objective valuation based on specifications, but actual transaction prices can vary due to these external real-world factors:</p>
             
             <div class="deviation-grid">
               <div class="dev-item">
                 <span class="dev-icon">📄</span>
-                <strong>Surat &amp; Pajak Kendaraan:</strong>
-                <p>Kelengkapan BPKB/STNK dan status pajak sangat krusial. Pajak mati (tertunggak) dapat mendepresiasi harga sebesar nominal tunggakan + denda administratif.</p>
+                <strong>Documents &amp; Tax Status:</strong>
+                <p>Complete paperwork (STNK &amp; BPKB) is essential. Unpaid annual road taxes or missing documents can discount the car's value by the tax debt plus administrative fines.</p>
               </div>
               <div class="dev-item">
                 <span class="dev-icon">🎨</span>
-                <strong>Popularitas Warna Unit:</strong>
-                <p>Warna netral (Putih, Hitam, Silver) memiliki likuiditas tinggi sehingga dihargai 5-10% lebih mahal dibanding warna mencolok (Merah, Hijau, Orange) di pasar sekunder Indonesia.</p>
+                <strong>Color Popularity:</strong>
+                <p>Neutral colors (White, Black, Silver) have high market liquidity and sell for 5-10% more than bright colors (Red, Green, Orange) in the Indonesian used car market.</p>
               </div>
               <div class="dev-item">
                 <span class="dev-icon">🔧</span>
-                <strong>Modifikasi Non-Standar:</strong>
-                <p>Aksesoris/modifikasi ekstrim (mesin, potong sasis, dll.) mempersempit pangsa pasar pembeli umum, sehingga sering kali justru mendepresiasi harga jual mobil.</p>
+                <strong>Non-Standard Modifications:</strong>
+                <p>Heavy custom modifications (engine tuning, structural body changes) narrow the buyer pool, often reducing the car's resale value compared to a stock vehicle.</p>
               </div>
               <div class="dev-item">
                 <span class="dev-icon">📍</span>
-                <strong>Faktor Geografis / Wilayah:</strong>
-                <p>Harga mobil bekas di Jabodetabek cenderung paling kompetitif. Di luar pulau Jawa, harga pasar umumnya lebih tinggi 10-25% karena biaya distribusi kendaraan baru.</p>
+                <strong>Geographical Location:</strong>
+                <p>Used car prices in the Greater Jakarta area (Jabodetabek) are highly competitive. Prices in regions outside Java can be 10-25% higher due to new vehicle distribution costs.</p>
               </div>
             </div>
           </div>
