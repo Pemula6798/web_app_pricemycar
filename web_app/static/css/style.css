@@ -208,8 +208,31 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .footer-copy { text-align: center; font-size: .75rem; color: var(--muted); max-width: 1100px; margin: 0 auto; padding-top: 24px; border-top: 1px solid var(--border); }
 
 /* ── ALERT ── */
-.alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: .875rem; }
+.alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: .875rem; display: flex; gap: 12px; align-items: flex-start; text-align: left; }
 .alert-error { background: #FEF2F2; color: var(--red); border: 1px solid #FECACA; }
+.alert-warning { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
+.alert-warning h4 { font-weight: 600; margin-bottom: 4px; font-size: .9rem; color: #78350F; }
+.alert-warning p { font-size: .82rem; color: #92400E; margin: 0; line-height: 1.4; }
+.alert-icon { font-size: 1.25rem; }
+
+/* ── MODELS CARD (PREDICT PAGE SIDEBAR) ── */
+.models-details { font-size: .8rem; color: var(--muted); cursor: pointer; }
+.models-details summary { font-weight: 600; color: var(--blue); margin-bottom: 6px; outline: none; }
+.supported-models-list { font-size: .75rem; line-height: 1.5; color: var(--text); background: var(--bg); padding: 12px; border-radius: 6px; border: 1px solid var(--border); margin-top: 6px; max-height: 200px; overflow-y: auto; text-align: left; }
+
+/* ── ANALYSIS CARD (RESULT PAGE) ── */
+.analysis-card { background: #fff; border-radius: var(--radius); padding: 24px; border: 1px solid var(--border); margin-top: 20px; text-align: left; }
+.analysis-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; color: var(--text); }
+.analysis-section { margin-bottom: 20px; }
+.analysis-section:last-child { margin-bottom: 0; }
+.analysis-section h4 { font-size: .85rem; font-weight: 600; margin-bottom: 8px; color: var(--blue); }
+.analysis-section p { font-size: .8rem; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+.deviation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+.dev-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; position: relative; }
+.dev-item strong { display: block; font-size: .78rem; font-weight: 600; color: var(--text); margin-bottom: 4px; padding-left: 24px; }
+.dev-icon { position: absolute; left: 12px; top: 12px; font-size: .95rem; }
+.dev-item p { font-size: .72rem; color: var(--muted); line-height: 1.4; margin: 0; padding-left: 24px; }
+
 
 /* ── RESPONSIVE DESIGN (MEDIA QUERIES) ── */
 @media (max-width: 992px) {
@@ -286,6 +309,10 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
   }
   
   .charts-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .deviation-grid {
     grid-template-columns: 1fr;
   }
   

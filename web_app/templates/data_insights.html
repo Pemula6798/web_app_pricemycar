@@ -16,7 +16,12 @@
     <div class="chart-wrap"><h3>Average Depreciation Curve</h3><canvas id="deprecChart" height="180"></canvas></div>
     <div class="chart-wrap"><h3>Price Impact by Mileage</h3><canvas id="mileageChart" height="180"></canvas></div>
   </div>
-  <div class="chart-wrap" style="margin-bottom:20px"><h3>Dataset Brand Distribution</h3><canvas id="brandChart" height="100"></canvas></div>
+  <div class="chart-wrap" style="margin-bottom:20px; display: flex; flex-direction: column; align-items: center;">
+    <h3>Dataset Brand Distribution</h3>
+    <div style="max-width: 340px; width: 100%; margin: 0 auto;">
+      <canvas id="brandChart" height="280"></canvas>
+    </div>
+  </div>
 </section>
 {% endblock %}
 {% block extra_js %}

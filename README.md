@@ -107,3 +107,43 @@ Sistem akan mengevaluasi **10 Faktor Fisik** berikut untuk mengukur persentase p
 | 8  | **Kondisi Ban Mobil** | Tebal & Baru / Normal / Botak | 0% s/d -5% |
 | 9  | **Riwayat Servis Bengkel** | Rutin Resmi / Rutin Biasa / Jarang Servis | **+3% Bonus Nilai** s/d -6% |
 | 10 | **Modifikasi Kendaraan** | Standar Pabrik / Ringan / Berat (Permanen) | 0% s/d -8% |
+
+---
+
+## 🇮🇩 Mekanisme Penyesuaian Harga Pasar Indonesia & Kondisi Terkini (2026)
+
+Karena model Machine Learning dilatih menggunakan data historis dari pasar India (dataset CarDekho dalam mata uang INR), kami menerapkan sistem penyesuaian khusus agar estimasi harga relevan dengan pasar **Indonesia per Juni 2026**.
+
+### 1. Rumus Kalkulasi Harga Konversi
+Harga mobil bekas dihitung menggunakan alur berikut:
+```text
+Harga Rupiah Dasar = (Prediksi Model INR) × Kurs Dasar 2026 × Pengali Pasar Indonesia
+Harga Akhir = Harga Rupiah Dasar × (1 - Total Persentase Pengurangan Kondisi)
+```
+
+### 2. Parameter Penyesuaian (Kondisi Juni 2026)
+*   **Kurs Dasar INR ke IDR**: `1 INR = Rp 187,6` (Menyesuaikan nilai tukar pasar riil 2026).
+*   **Faktor Depresiasi Rupiah & Inflasi Kendaraan 2026**: Kenaikan umum harga pasar mobil bekas sebesar **+12% (1.12x)** yang diintegrasikan ke dalam pengali gabungan.
+*   **Pengali Pasar Indonesia Gabungan (Combined Market Multiplier)**:
+    Untuk menyeimbangkan disparitas pajak (PPnBM, PPN, BBN-KB), bea masuk impor, serta kekuatan resale value lokal, pengali berikut diterapkan secara otomatis:
+    
+    | Kategori Brand | Nilai Pengali | Deskripsi & Contoh |
+    |----------------|---------------|-------------------|
+    | **Merek Mewah** | **1.95x** | Mercedes-Benz, BMW, Audi, Jaguar, Land Rover. Dampak PPnBM tinggi dan biaya komponen CBU. |
+    | **Merek Populer Indonesia** | **1.60x** | Toyota, Honda, Daihatsu, Suzuki, Mitsubishi. Resale value sangat kuat dan peminat tinggi di pasar lokal. |
+    | **Merek Lainnya** | **1.45x** | Chevrolet, Ford, Hyundai, Nissan, Renault, Datsun, dll. |
+
+### 3. Sumber Pembanding Valuasi
+Sistem penyesuaian pasar ini secara periodik dikalibrasi secara silang dengan harga pasar aktif dari tiga platform otomotif utama di Indonesia:
+1.  **OLX Indonesia** (olx.co.id) - Referensi harga iklan pengguna perorangan.
+2.  **Mobil123.com** - Referensi harga dealer resmi dan showroom.
+3.  **GridOto Pricelist** - Referensi daftar harga pasaran ter-update secara berkala.
+
+---
+
+## ⚠️ Validasi & Batasan Model Terdaftar (Model Support Checks)
+
+Sistem memverifikasi input brand dan model dari pengguna untuk memberikan transparansi mengenai keandalan estimasi harga:
+*   **Model Terdaftar (Didukung Penuh)**: Mobil-mobil populer Indonesia (seperti Avanza, Brio, Xpander, Fortuner, Jazz, dll.) yang dipetakan secara empiris ke padanan model latih, atau brand/model yang memang ada langsung di database. Hasil prediksi untuk model ini memiliki tingkat kepercayaan tinggi.
+*   **Model Tidak Terdaftar**: Jika pengguna memasukkan model di luar database (misal: "Toyota Raize", "Wuling Almaz"), sistem akan melakukan estimasi segmentasi kasar berdasarkan parameter umum (usia, transmisi, bahan bakar, odometer).
+    *   **Notifikasi Khusus**: Halaman hasil akan memunculkan banner peringatan kuning (**Warning**) secara mencolok untuk menginfokan kepada pengguna bahwa keakuratan harga kurang optimal (berpotensi meleset) karena data latih belum mencakup model tersebut secara penuh.
