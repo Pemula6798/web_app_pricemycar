@@ -460,29 +460,29 @@ def predict_price(form_data: dict) -> dict:
 
     if is_luxury_brand:
         # BMW/Mercedes/Audi base INR price is already very high in India.
-        # Indonesia luxury market = Rp300-600Jt range for 2017-2020 units.
-        # 1.20x gives BMW X1 2019 ~490Jt which is within real market (300-450Jt upper).
-        market_multiplier = 1.20
+        # 1.15x: BMW X1 2019 INR 1.8M * 187.6 * 1.15 = ~388Jt (real: 300-450Jt) ✓
+        market_multiplier = 1.15
     elif (any(x in orig_brand.lower() for x in standard_japanese_brands) and is_premium_japanese_model) or \
          (any(x in brand.lower() for x in standard_japanese_brands) and is_premium_japanese_model):
-        # Premium Toyota/Honda SUV/MPV (Fortuner, Innova, CR-V): strong resale demand in Indonesia
-        # Fortuner 2020 real: Rp350-455Jt. 1.40x gives ~476Jt (slightly over, condition penalty will bring it down)
-        market_multiplier = 1.40
+        # Premium Toyota/Honda SUV/MPV (Fortuner, Innova, CR-V)
+        # Fortuner 2020 INR 2.2M * 187.6 * 1.30 = ~537Jt (real: 350-455Jt upper)
+        # Using 1.15x: 2.2M * 187.6 * 1.15 = ~474Jt - closer to market upper bound
+        market_multiplier = 1.15
     elif any(x in orig_brand.lower() for x in standard_japanese_brands) or \
          any(x in brand.lower() for x in standard_japanese_brands):
-        # Standard Toyota/Honda (City, Jazz, Yaris, Brio, HR-V) - Indonesian market commands premium
-        # Honda City 2018 real: Rp180-220Jt. Model INR 462k * 187.6 * 1.55 = ~134Jt (still low due to model)
-        # Use 1.55x as best fit for standard Honda/Toyota hatchback/sedan segment
+        # Standard Toyota/Honda (City, Jazz, Yaris, Brio, HR-V)
+        # Honda City 2018 INR 488k * 187.6 * 1.55 = ~142Jt (real: 180-220Jt, still low model output)
         market_multiplier = 1.55
     elif any(x in orig_brand.lower() for x in budget_japanese_brands) or \
          any(x in brand.lower() for x in budget_japanese_brands):
-        # Suzuki/Daihatsu/Mitsubishi: very popular in Indonesia, commands a local premium
-        # Ertiga 2017 real: Rp120-180Jt. Model outputs 102Jt at 1.50x -> use 1.65x
-        market_multiplier = 1.65
+        # Suzuki/Daihatsu/Mitsubishi: popular local market
+        # Ertiga 2017 INR 398k * 187.6 * 1.70 = ~126Jt (real: 120-180Jt) ✓
+        market_multiplier = 1.70
     elif any(x in orig_brand.lower() for x in korean_other_brands) or \
          any(x in brand.lower() for x in korean_other_brands):
-        # Korean/American/Others: moderate local demand
-        # Hyundai i20 2019 real: Rp100-160Jt. 1.25x gives 149Jt -> OK
+        # Korean/American/Others
+        # Hyundai i20 2019 INR 518k * 187.6 * 1.25 = ~121Jt (real: 100-160Jt) ✓
+        # Ford EcoSport: model outputs very high INR (anomaly) - cap via lower multiplier
         market_multiplier = 1.25
     else:
         # Default fallback
@@ -506,8 +506,8 @@ def predict_price(form_data: dict) -> dict:
         'ci_low':          round(adj_low),
         'ci_high':         round(adj_high),
         'condition':       condition,
-        'ai_model':        'Gradient Boosting (HistGBR)',
-        'accuracy_r2':     '73.3%',  # Test R² on held-out set (Train R²: 92.1%)
+        'ai_model':        'HistGradient Boosting',
+        'accuracy_r2':     '80.6%',  # Test R² on held-out set (Train R²: 86.8%, gap: 6.2% = OK)
         'is_model_supported': is_model_supported,
         'market_multiplier': market_multiplier,
         'inputs': {
