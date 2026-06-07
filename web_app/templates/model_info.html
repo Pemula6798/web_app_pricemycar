@@ -39,87 +39,14 @@
         <div class="metric-val">78.2%</div>
       </div>
       <div class="metric-row">
-        <div><div class="metric-name">Average Price Deviation (MAE)</div><div class="metric-desc">The average absolute nominal error of predictions relative to actual market transactions (equivalent to ~Rp 20-30 Million).</div></div>
-        <div class="metric-val" style="color:var(--green)">112k INR</div>
+        <div><div class="metric-name">Average Price Deviation (MAE)</div><div class="metric-desc">The average absolute nominal error of predictions relative to actual market transactions (equivalent to 112,033 INR).</div></div>
+        <div class="metric-val" style="color:var(--green)">Rp 21.0M</div>
       </div>
       <div class="metric-row">
-        <div><div class="metric-name">Generalization Gap</div><div class="metric-desc">The difference between Train R² and Test R² (86.8% vs 78.2%). A low gap indicates the model is highly stable and does not overfit.</div></div>
+        <div><div class="metric-name">Generalization Gap</div><div class="metric-desc">The difference between Train R² and Test R² (86.1% vs 78.2%). A low gap indicates the model is highly stable and does not overfit.</div></div>
         <div class="metric-val" style="color:var(--green)">7.9%</div>
       </div>
     </div>
   </div>
-
-  <h2 style="margin-top:40px;font-size:1.1rem;font-weight:600">Model Performance Comparison</h2>
-  <p style="color:#64748B;font-size:.85rem;margin-bottom:16px">Below is the comparison table of all model architectures evaluated during model selection on 5-fold cross-validation:</p>
-  <table class="breakdown-table" style="margin-top:16px; width: 100%;">
-    <thead>
-      <tr>
-        <th>Model Algorithm</th>
-        <th>Train R²</th>
-        <th>Val R²</th>
-        <th>Test R²</th>
-        <th>Test MAE (INR)</th>
-        <th>Test MAPE (%)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Linear Regression</td>
-        <td>0.5738</td>
-        <td>0.5867</td>
-        <td>0.5376</td>
-        <td>171,536</td>
-        <td>39.45%</td>
-      </tr>
-      <tr>
-        <td>Ridge Regression</td>
-        <td>0.5560</td>
-        <td>0.5721</td>
-        <td>0.5178</td>
-        <td>173,291</td>
-        <td>39.30%</td>
-      </tr>
-      <tr>
-        <td>Lasso Regression</td>
-        <td>0.5167</td>
-        <td>0.5280</td>
-        <td>0.4657</td>
-        <td>178,670</td>
-        <td>39.90%</td>
-      </tr>
-      <tr>
-        <td>Random Forest (Baseline)</td>
-        <td>0.8179</td>
-        <td>0.7246</td>
-        <td>0.6954</td>
-        <td>133,359</td>
-        <td>31.95%</td>
-      </tr>
-      <tr>
-        <td>Random Forest (Tuned)</td>
-        <td>0.9472</td>
-        <td>0.7389</td>
-        <td>0.7326</td>
-        <td>114,193</td>
-        <td>27.93%</td>
-      </tr>
-      <tr>
-        <td>Gradient Boosting</td>
-        <td>0.9279</td>
-        <td>0.7653</td>
-        <td>0.7330</td>
-        <td>116,281</td>
-        <td>26.94%</td>
-      </tr>
-      <tr style="background: rgba(76, 175, 80, 0.1); font-weight: bold; border-left: 4px solid var(--green);">
-        <td>HistGradientBoosting (Winner)</td>
-        <td>0.8613</td>
-        <td>0.7223</td>
-        <td>0.7822</td>
-        <td>112,033</td>
-        <td>27.62%</td>
-      </tr>
-    </tbody>
-  </table>
 </section>
 {% endblock %}
