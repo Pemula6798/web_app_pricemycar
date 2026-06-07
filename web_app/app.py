@@ -507,7 +507,7 @@ def predict_price(form_data: dict) -> dict:
         'ci_high':         round(adj_high),
         'condition':       condition,
         'ai_model':        'HistGradient Boosting',
-        'accuracy_r2':     '80.6%',  # Test R² on held-out set (Train R²: 86.8%, gap: 6.2% = OK)
+        'accuracy_r2':     '78.2%',  # Test R² on held-out set (Train R²: 86.1%, gap: 7.9% = OK)
         'is_model_supported': is_model_supported,
         'market_multiplier': market_multiplier,
         'inputs': {
