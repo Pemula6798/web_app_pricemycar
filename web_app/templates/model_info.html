@@ -16,34 +16,110 @@
   <div class="algo-metrics">
     <div class="algo-section">
       <h2>AI Prediction System</h2>
-      <p>PriceMyCar uses **Predictive AI technology** that acts as a digital professional car appraiser. This AI has learned from thousands of real-world used car sales transactions.</p>
-      <p>Unlike rigid mathematical formulas, our AI recognizes complex depreciation trends—for example, how the value of a luxury vehicle drops much faster than an economy family car as mileage increases.</p>
-      <h3 style="margin-top:20px;font-size:.9rem;font-weight:600">Key Parameters Evaluated by AI:</h3>
+      <p>PriceMyCar uses <strong>Predictive AI technology</strong> powered by the <strong>HistGradientBoostingRegressor (HGBR)</strong> algorithm. This model was trained on thousands of real-world used car sales transactions to capture non-linear depreciation trends—for example, how the value of a luxury vehicle drops much faster than an economy family car as mileage increases.</p>
+      
+      <h3 style="margin-top:20px;font-size:.95rem;font-weight:600">Why HGBR was selected:</h3>
+      <p>HGBR groups continuous numerical variables (like mileage or age) into 256 integer bins (histogram-based binning). This significantly reduces computation time, improves noise resistance, and acts as a strong regularizer. We applied L2 regularization (2.0) and restricted tree complexity (max leaf nodes = 25) to prevent overfitting.</p>
+
+      <h3 style="margin-top:20px;font-size:.95rem;font-weight:600">Key Parameters Evaluated by AI:</h3>
       <ul class="feature-list">
-        <li><strong>Brand &amp; Model:</strong> Analyzes the market popularity and demand of your specific car model.</li>
-        <li><strong>Year of Production:</strong> Evaluates natural annual depreciation based on the car's age.</li>
-        <li><strong>Mileage (Odometer):</strong> Measures physical wear and tear from vehicle usage.</li>
-        <li><strong>Fuel &amp; Transmission:</strong> Compares market preference for automatic vs. manual transmissions and fuel types.</li>
-        <li><strong>Ownership History:</strong> Assesses the impact of past owners (first owner, second owner, etc.).</li>
-        <li><strong>Usage Frequency:</strong> Identifies whether the vehicle was rarely driven or heavily used.</li>
-        <li><strong>Physical Condition Score:</strong> Integrates the 10-factor physical evaluation (body, interior, engine, tires, etc.).</li>
+        <li><strong>Brand &amp; Model:</strong> Popularity and demand representation via Frequency Encoding.</li>
+        <li><strong>Car Age:</strong> Derived feature (2025 - year) capturing the primary driver of value loss.</li>
+        <li><strong>Mileage (Odometer):</strong> Cumulative physical wear and tear.</li>
+        <li><strong>Fuel &amp; Transmission:</strong> Encoded preferences (manual vs automatic and fuel types).</li>
+        <li><strong>Ownership History:</strong> Encoded ordinal tiers (First Owner to Test Drive Car).</li>
+        <li><strong>Interaction Terms:</strong> Engineered feature (age × km) capturing cumulative depreciation.</li>
       </ul>
     </div>
+    
     <div class="metrics-section">
       <h2>AI Valuation Metrics</h2>
       <div class="metric-row">
-        <div><div class="metric-name">AI Valuation Accuracy</div><div class="metric-desc">How accurately the AI reads and predicts key used car price factors based on real market data.</div></div>
-        <div class="metric-val">92%+</div>
+        <div><div class="metric-name">AI Model Accuracy (R²)</div><div class="metric-desc">The proportion of used car price variance successfully explained by our machine learning features on the held-out test split.</div></div>
+        <div class="metric-val">80.6%</div>
       </div>
       <div class="metric-row">
-        <div><div class="metric-name">Average Price Deviation</div><div class="metric-desc">The typical difference between the AI's estimate and the actual transaction price in the market.</div></div>
-        <div class="metric-val" style="color:var(--green)">~Rp 25 Million</div>
+        <div><div class="metric-name">Average Price Deviation (MAE)</div><div class="metric-desc">The average absolute nominal error of predictions relative to actual market transactions (equivalent to ~Rp 20-30 Million).</div></div>
+        <div class="metric-val" style="color:var(--green)">107k INR</div>
       </div>
       <div class="metric-row">
-        <div><div class="metric-name">Estimation Consistency</div><div class="metric-desc">Confidence in pricing. Shows that the AI is stable and rarely produces extreme errors for most car models.</div></div>
-        <div class="metric-val" style="color:var(--green)">Very High</div>
+        <div><div class="metric-name">Generalization Gap</div><div class="metric-desc">The difference between Train R² and Test R² (86.8% vs 80.6%). A low gap indicates the model is highly stable and does not overfit.</div></div>
+        <div class="metric-val" style="color:var(--green)">6.2%</div>
       </div>
     </div>
   </div>
+
+  <h2 style="margin-top:40px;font-size:1.1rem;font-weight:600">Model Performance Comparison</h2>
+  <p style="color:#64748B;font-size:.85rem;margin-bottom:16px">Below is the comparison table of all model architectures evaluated during model selection on 5-fold cross-validation:</p>
+  <table class="breakdown-table" style="margin-top:16px; width: 100%;">
+    <thead>
+      <tr>
+        <th>Model Algorithm</th>
+        <th>Train R²</th>
+        <th>Val R²</th>
+        <th>Test R²</th>
+        <th>Test MAE (INR)</th>
+        <th>Test MAPE (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Linear Regression</td>
+        <td>0.5738</td>
+        <td>0.5867</td>
+        <td>0.5376</td>
+        <td>171,536</td>
+        <td>39.45%</td>
+      </tr>
+      <tr>
+        <td>Ridge Regression</td>
+        <td>0.5560</td>
+        <td>0.5721</td>
+        <td>0.5178</td>
+        <td>173,291</td>
+        <td>39.30%</td>
+      </tr>
+      <tr>
+        <td>Lasso Regression</td>
+        <td>0.5167</td>
+        <td>0.5280</td>
+        <td>0.4657</td>
+        <td>178,670</td>
+        <td>39.90%</td>
+      </tr>
+      <tr>
+        <td>Random Forest (Baseline)</td>
+        <td>0.8179</td>
+        <td>0.7246</td>
+        <td>0.6954</td>
+        <td>133,359</td>
+        <td>31.95%</td>
+      </tr>
+      <tr>
+        <td>Random Forest (Tuned)</td>
+        <td>0.9472</td>
+        <td>0.7389</td>
+        <td>0.7326</td>
+        <td>114,193</td>
+        <td>27.93%</td>
+      </tr>
+      <tr>
+        <td>Gradient Boosting</td>
+        <td>0.9279</td>
+        <td>0.7653</td>
+        <td>0.7330</td>
+        <td>116,281</td>
+        <td>26.94%</td>
+      </tr>
+      <tr style="background: rgba(76, 175, 80, 0.1); font-weight: bold; border-left: 4px solid var(--green);">
+        <td>HistGradientBoosting (Winner)</td>
+        <td>0.8680</td>
+        <td>0.7265</td>
+        <td>0.8060</td>
+        <td>107,252</td>
+        <td>27.40%</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 {% endblock %}
