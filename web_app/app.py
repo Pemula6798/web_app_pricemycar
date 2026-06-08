@@ -27,9 +27,9 @@ from flask import (Flask, render_template, request,
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'pricemycar-dev-secret')
 
-# =============================================================
+
 # Model Loading (lazy - loaded once on first predict request)
-# =============================================================
+
 _model         = None
 _encoder       = None
 _brand_freq    = None
@@ -44,9 +44,9 @@ def load_artifacts():
         _feature_cols = joblib.load('feature_columns.pkl')
 
 
-# =============================================================
+
 # Condition Penalty System
-# =============================================================
+
 CONDITION_PENALTIES = {
     # Body / Physical Damage
     # Severity level: 0=none, 1=minor scratches, 2=moderate dents, 3=severe
@@ -232,9 +232,9 @@ def calculate_condition_penalty(form_data: dict) -> dict:
     }
 
 
-# =============================================================
+
 # ML Prediction
-# =============================================================
+
 def predict_price(form_data: dict) -> dict:
     """
     Run ML prediction then apply condition penalty.
@@ -404,19 +404,6 @@ def predict_price(form_data: dict) -> dict:
     log_pred  = _model.predict(row)[0]
     base_price_inr = float(np.expm1(log_pred))
     
-    # 🌟 2026 INDONESIAN MARKET ADJUSTMENT SYSTEM (OLX, Mobil123, & GridOto Reference)
-    # The price is adjusted from INR to IDR using the June 2026 exchange rate (1 INR = 187.6 IDR)
-    # and a market multiplier that accounts for import duties, PPnBM, and Rupiah depreciation.
-    # Multipliers calibrated against OLX.co.id and Mobil123.com listings (June 2026):
-    #   Luxury European (1.55x): BMW, Mercedes, Audi, Jaguar, Land Rover, Porsche, Lexus, Volvo
-    #     - These cars have a high price floor in India too, so double scaling gets excessive.
-    #     - Real BMW X1 2019 Indonesia: Rp300-450Jt vs model INR ~2.1M. 1.55x gives ~610Jt, acceptable upper.
-    #   Japanese Premium (1.40x): Toyota Fortuner/Innova/Corolla, Honda CR-V/HR-V/Civic/City
-    #     - Fortuner 2020 real: Rp350-455Jt. Model INR 1.77M * 187.6 * 1.40 = ~465Jt ✓
-    #   Japanese Budget (1.50x): Maruti/Suzuki/Daihatsu/Mitsubishi budget MPVs (Ertiga, Avanza-equiv)
-    #     - These sell at a premium in Indonesia vs India due to local popularity
-    #   Korean/Others (1.25x): Hyundai, Kia, Ford, Nissan, Chevrolet
-    #     - Moderate local demand, less tax exposure
     EXCHANGE_RATE_INR_TO_IDR = 187.6
     
     # Check model support status
@@ -460,29 +447,22 @@ def predict_price(form_data: dict) -> dict:
 
     if is_luxury_brand:
         # BMW/Mercedes/Audi base INR price is already very high in India.
-        # 1.15x: BMW X1 2019 INR 1.8M * 187.6 * 1.15 = ~388Jt (real: 300-450Jt) ✓
         market_multiplier = 1.15
     elif (any(x in orig_brand.lower() for x in standard_japanese_brands) and is_premium_japanese_model) or \
          (any(x in brand.lower() for x in standard_japanese_brands) and is_premium_japanese_model):
         # Premium Toyota/Honda SUV/MPV (Fortuner, Innova, CR-V)
-        # Fortuner 2020 INR 2.2M * 187.6 * 1.30 = ~537Jt (real: 350-455Jt upper)
-        # Using 1.15x: 2.2M * 187.6 * 1.15 = ~474Jt - closer to market upper bound
         market_multiplier = 1.15
     elif any(x in orig_brand.lower() for x in standard_japanese_brands) or \
          any(x in brand.lower() for x in standard_japanese_brands):
         # Standard Toyota/Honda (City, Jazz, Yaris, Brio, HR-V)
-        # Honda City 2018 INR 488k * 187.6 * 1.55 = ~142Jt (real: 180-220Jt, still low model output)
         market_multiplier = 1.55
     elif any(x in orig_brand.lower() for x in budget_japanese_brands) or \
          any(x in brand.lower() for x in budget_japanese_brands):
         # Suzuki/Daihatsu/Mitsubishi: popular local market
-        # Ertiga 2017 INR 398k * 187.6 * 1.70 = ~126Jt (real: 120-180Jt) ✓
         market_multiplier = 1.70
     elif any(x in orig_brand.lower() for x in korean_other_brands) or \
          any(x in brand.lower() for x in korean_other_brands):
         # Korean/American/Others
-        # Hyundai i20 2019 INR 518k * 187.6 * 1.25 = ~121Jt (real: 100-160Jt) ✓
-        # Ford EcoSport: model outputs very high INR (anomaly) - cap via lower multiplier
         market_multiplier = 1.25
     else:
         # Default fallback
@@ -522,15 +502,14 @@ def predict_price(form_data: dict) -> dict:
     }
 
 
-# =============================================================
 # In-memory result store (use Redis/DB in production)
-# =============================================================
+
 _results_store: dict = {}
 
 
-# =============================================================
+
 # Routes
-# =============================================================
+
 @app.route('/')
 def home():
     return render_template('index.html')

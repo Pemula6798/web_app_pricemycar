@@ -52,7 +52,7 @@
           <div class="form-row two-col">
             <div class="form-group">
               <label>Fuel Type</label>
-              <select name="fuel_type" required>
+              <select name="fuel_type" required title="Fuel Type">
                 <option value="">Select Fuel Type</option>
                 <option>Petrol</option>
                 <option>Diesel</option>
@@ -63,7 +63,7 @@
             </div>
             <div class="form-group">
               <label>Transmission</label>
-              <select name="transmission" required>
+              <select name="transmission" required title="Transmission">
                 <option value="">Select Transmission</option>
                 <option>Manual</option>
                 <option>Automatic</option>
@@ -73,7 +73,7 @@
           <div class="form-row two-col">
             <div class="form-group">
               <label>Seller Type</label>
-              <select name="seller_type">
+              <select name="seller_type" title="Seller Type">
                 <option>Individual</option>
                 <option>Dealer</option>
                 <option>Trustmark Dealer</option>
@@ -81,7 +81,7 @@
             </div>
             <div class="form-group">
               <label>Owner</label>
-              <select name="owner">
+              <select name="owner" title="Owner">
                 <option>First Owner</option>
                 <option>Second Owner</option>
                 <option>Third Owner</option>
@@ -108,7 +108,7 @@
           <div class="form-row two-col">
             <div class="form-group">
               <label>Body Damage Severity</label>
-              <select name="body_damage_severity">
+              <select name="body_damage_severity" title="Body Damage Severity">
                 <option value="0">No Damage (0%)</option>
                 <option value="1">Minor Scratches / Scuffs (-4%)</option>
                 <option value="2">Moderate Dents (-12%)</option>
@@ -126,7 +126,7 @@
           <div class="form-row two-col">
             <div class="form-group">
               <label>Paint Condition</label>
-              <select name="paint_condition">
+              <select name="paint_condition" title="Paint Condition">
                 <option value="excellent">Excellent (0%)</option>
                 <option value="good" selected>Good (-2%)</option>
                 <option value="fair">Fair / Faded (-6%)</option>
@@ -135,7 +135,7 @@
             </div>
             <div class="form-group">
               <label>Interior Condition</label>
-              <select name="interior_condition">
+              <select name="interior_condition" title="Interior Condition">
                 <option value="excellent">Excellent (0%)</option>
                 <option value="good" selected>Good (-2%)</option>
                 <option value="fair">Fair / Stained (-7%)</option>
@@ -148,7 +148,7 @@
           <div class="form-row two-col">
             <div class="form-group">
               <label>Accident History</label>
-              <select name="accident_history">
+              <select name="accident_history" title="Accident History">
                 <option value="none">No Accident (0%)</option>
                 <option value="minor">Minor Accident, Repaired (-8%)</option>
                 <option value="moderate">Moderate / Airbag Deployed (-20%)</option>
@@ -157,7 +157,7 @@
             </div>
             <div class="form-group">
               <label>Flood / Water Damage</label>
-              <select name="flood_damage">
+              <select name="flood_damage" title="Flood Damage">
                 <option value="none">None (0%)</option>
                 <option value="minor">Minor / Interior Only (-20%)</option>
                 <option value="severe">Severe / Engine Affected (-50%)</option>
@@ -169,7 +169,7 @@
           <div class="form-row two-col">
             <div class="form-group">
               <label>Engine &amp; Mechanical</label>
-              <select name="engine_condition">
+              <select name="engine_condition" title="Engine Condition">
                 <option value="excellent">Excellent (0%)</option>
                 <option value="good" selected>Good (-3%)</option>
                 <option value="fair">Fair / Minor Issues (-10%)</option>
@@ -178,7 +178,7 @@
             </div>
             <div class="form-group">
               <label>Tire Condition</label>
-              <select name="tire_condition">
+              <select name="tire_condition" title="Tire Condition">
                 <option value="good" selected>Good (&gt;50% Tread) (0%)</option>
                 <option value="worn">Worn (20–50% Tread) (-3%)</option>
                 <option value="bald">Bald / Needs Replacement (-5%)</option>
@@ -190,7 +190,7 @@
           <div class="form-row two-col">
             <div class="form-group">
               <label>Service / Maintenance History</label>
-              <select name="service_history">
+              <select name="service_history" title="Service History">
                 <option value="complete">Complete Records (+3% Bonus)</option>
                 <option value="partial" selected>Partial Records (0%)</option>
                 <option value="none">No Records (-6%)</option>
@@ -198,7 +198,7 @@
             </div>
             <div class="form-group">
               <label>Modification Status</label>
-              <select name="modification_status">
+              <select name="modification_status" title="Modification Status">
                 <option value="stock" selected>Stock / Unmodified (0%)</option>
                 <option value="cosmetic_minor">Minor Cosmetic Mods (-2%)</option>
                 <option value="cosmetic_major">Major Cosmetic Mods (-5%)</option>

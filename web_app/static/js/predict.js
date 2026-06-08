@@ -1,6 +1,6 @@
-// ─────────────────────────────────────────────
+
 // predict.js — live penalty preview + progress
-// ─────────────────────────────────────────────
+
 
 const PENALTIES = {
   body_damage_severity: { 0: 0, 1: 4, 2: 12, 3: 28 },
